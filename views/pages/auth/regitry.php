@@ -219,7 +219,7 @@ function checkEmailAvailability() {
     message.className = 'validation-message';
     
     emailCheckTimeout = setTimeout(() => {
-        fetch('../auth/check-email.php?email=' + encodeURIComponent(email))
+        fetch('../../api/check-email.php?email=' + encodeURIComponent(email))
             .then(response => response.json())
             .then(data => {
                 if (data.available) {
