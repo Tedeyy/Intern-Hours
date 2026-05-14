@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config.php';
 session_start();
 
 // If user is already logged in, redirect to their dashboard

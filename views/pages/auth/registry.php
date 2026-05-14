@@ -49,6 +49,39 @@
                     <option value="Admin">Admin</option>
                 </select>
             </div>
+
+            <?php
+            // Fetch offices
+            $offices = $pdo->query("SELECT * FROM office ORDER BY office_name")->fetchAll();
+            ?>
+            <div class="form-group">
+                <label for="office_id">Office</label>
+                <select id="office_id" name="office_id" required onchange="toggleNewInput('office')">
+                    <option value="">Select Office</option>
+                    <?php foreach ($offices as $o): ?>
+                        <option value="<?php echo $o['id']; ?>"><?php echo htmlspecialchars($o['office_name']); ?></option>
+                    <?php endforeach; ?>
+                    <option value="new">+ Add New Office</option>
+                </select>
+                <input type="text" id="new_office_name" name="new_office_name" placeholder="Enter new office name" style="display: none; margin-top: 10px;">
+            </div>
+
+            <?php
+            // Fetch organizations
+            $orgs = $pdo->query("SELECT * FROM organization ORDER BY organization_name")->fetchAll();
+            ?>
+            <div class="form-group">
+                <label for="organization_id">Organization</label>
+                <select id="organization_id" name="organization_id" required onchange="toggleNewInput('organization')">
+                    <option value="">Select Organization</option>
+                    <?php foreach ($orgs as $org): ?>
+                        <option value="<?php echo $org['id']; ?>"><?php echo htmlspecialchars($org['organization_name']); ?></option>
+                    <?php endforeach; ?>
+                    <option value="new">+ Add New Organization</option>
+                </select>
+                <input type="text" id="new_organization_name" name="new_organization_name" placeholder="Enter new organization name" style="display: none; margin-top: 10px;">
+            </div>
+
             <button type="submit" class="btn-primary">Register</button>
         </form>
         <p class="auth-switch">

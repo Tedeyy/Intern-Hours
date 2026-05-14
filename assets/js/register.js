@@ -71,3 +71,16 @@ function checkEmailAvailability() {
             });
     }, 500);
 }
+function toggleNewInput(type) {
+    const select = document.getElementById(type + '_id');
+    const input = document.getElementById('new_' + type + '_name');
+    
+    if (select.value === 'new') {
+        input.style.display = 'block';
+        input.required = true;
+        input.focus();
+    } else {
+        input.style.display = 'none';
+        input.required = false;
+    }
+}
