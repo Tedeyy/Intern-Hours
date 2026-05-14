@@ -17,7 +17,12 @@ $page = $_GET['page'] ?? 'login';
 $showNavbar = !in_array($page, ['login', 'register']);
 ?>
 
-<?php require_once __DIR__ . '/components/header.php'; ?>
+<?php 
+$base_url = "../";
+require_once __DIR__ . '/components/header.php'; 
+?>
+</head>
+<body>
 
 <?php if ($showNavbar): ?>
     <?php require_once __DIR__ . '/components/navbar.php'; ?>
@@ -38,3 +43,5 @@ $showNavbar = !in_array($page, ['login', 'register']);
 </main>
 
 <?php require_once __DIR__ . '/components/footer.php'; ?>
+</body>
+</html>

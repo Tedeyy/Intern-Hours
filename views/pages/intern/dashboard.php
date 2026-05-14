@@ -3,24 +3,19 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
+    header("Location: ../../feed.php?page=login");
     exit;
 }
 
 $user_id = $_SESSION['user_id'];
 $user_name = $_SESSION['user_name'];
-$current_month = $_GET['month'] ?? date('m');
-$current_year = $_GET['year'] ?? date('Y');
+$current_month = (int)($_GET['month'] ?? date('m'));
+$current_year = (int)($_GET['year'] ?? date('Y'));
 
+$base_url = "../../../";
+require_once '../../components/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - OurTracker</title>
-    <link rel="stylesheet" href="../../assets/css/global.css">
     <style>
         .dashboard-container {
             display: grid;
@@ -274,9 +269,95 @@ $current_year = $_GET['year'] ?? date('Y');
             background: #d32f2f;
         }
 
+        .filter-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .filter-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .filter-group input:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-filter {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .btn-filter:hover {
+            background: #4a4a4a;
+        }
+
+        .btn-reset {
+            background: #ddd;
+            color: #1a1a1a;
+        }
+
+        .btn-reset:hover {
+            background: #ccc;
+        }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group input {
+                width: 100%;
+            }
+
+            .filter-buttons {
+                width: 100%;
+            }
+
+            .filter-buttons button {
+                flex: 1;
             }
 
             .calendar-grid {
@@ -290,8 +371,10 @@ $current_year = $_GET['year'] ?? date('Y');
     </style>
 </head>
 <body>
+    <?php require_once '../../components/navbar.php'; ?>
     <div class="dashboard-container">
         <div class="calendar-section">
+
             <div class="calendar-header">
                 <h2 id="calendar-title">December 2024</h2>
                 <div class="calendar-nav">
@@ -308,6 +391,14 @@ $current_year = $_GET['year'] ?? date('Y');
         </div>
 
         <div class="stats-sidebar">
+            <div class="stat-card">
+                <div class="stat-label">Total Hours</div>
+                <div class="stat-value">
+                    <span id="total-hours">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
             <div class="stat-card">
                 <div class="stat-label">Month Total</div>
                 <div class="stat-value">
@@ -329,6 +420,30 @@ $current_year = $_GET['year'] ?? date('Y');
                 <div class="stat-value">
                     <span id="average-hours">0</span>
                     <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label" id="filtered-label">Filtered Total</div>
+                <div class="stat-value">
+                    <span id="filtered-total">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="stat-label">Filter by Date</div>
+                <div class="filter-group">
+                    <label>From Date</label>
+                    <input type="date" id="filter-from-date">
+                </div>
+                <div class="filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="filter-to-date">
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn-filter" onclick="applyFilter()">Apply</button>
+                    <button class="btn-reset" onclick="resetFilter()">Reset</button>
                 </div>
             </div>
         </div>
@@ -355,17 +470,43 @@ $current_year = $_GET['year'] ?? date('Y');
     </div>
 
     <script>
-        let currentMonth = <?php echo $current_month; ?>;
-        let currentYear = <?php echo $current_year; ?>;
+        let currentMonth = parseInt('<?php echo $current_month; ?>');
+        let currentYear = parseInt('<?php echo $current_year; ?>');
         let selectedDate = null;
         let hoursData = {};
-        let userId = <?php echo $user_id; ?>;
+        let monthHoursData = {};
+        let allHoursData = {};
+        let userId = parseInt('<?php echo $user_id; ?>');
+        let filterFromDate = null;
+        let filterToDate = null;
 
         // Initialize calendar
         document.addEventListener('DOMContentLoaded', function() {
+            setDefaultDates();
+            loadAllHours();
             loadHours();
             renderCalendar();
         });
+
+        function setDefaultDates() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            document.getElementById('filter-from-date').valueAsDate = firstDay;
+            document.getElementById('filter-to-date').valueAsDate = today;
+        }
+
+        function loadAllHours() {
+            fetch('../../../api/hours.php?all=true')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        allHoursData = data.hours;
+                        updateTotalHours();
+                    }
+                })
+                .catch(error => console.error('Error loading all hours:', error));
+        }
 
         function renderCalendar() {
             const firstDay = new Date(currentYear, currentMonth - 1, 1);
@@ -375,8 +516,13 @@ $current_year = $_GET['year'] ?? date('Y');
 
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                 'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('calendar-title').textContent = 
-                monthNames[currentMonth - 1] + ' ' + currentYear;
+            
+            let titleText = monthNames[currentMonth - 1] + ' ' + currentYear;
+            if (filterFromDate && filterToDate) {
+                titleText = 'Filtered (' + formatDate(filterFromDate) + ' to ' + formatDate(filterToDate) + ')';
+            }
+            
+            document.getElementById('calendar-title').textContent = titleText;
 
             const calendarGrid = document.getElementById('calendar-grid');
             calendarGrid.innerHTML = '';
@@ -442,11 +588,12 @@ $current_year = $_GET['year'] ?? date('Y');
         }
 
         function loadHours() {
-            fetch('../api/hours.php?month=' + currentMonth + '&year=' + currentYear)
+            fetch('../../../api/hours.php?month=' + currentMonth + '&year=' + currentYear)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         hoursData = data.hours;
+                        monthHoursData = JSON.parse(JSON.stringify(data.hours));
                         renderCalendar();
                     }
                 })
@@ -479,14 +626,16 @@ $current_year = $_GET['year'] ?? date('Y');
             formData.append('date', selectedDate);
             formData.append('hours', hours);
 
-            fetch('../api/hours.php', {
+            fetch('../../../api/hours.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    hoursData[selectedDate] = parseFloat(hours);
+                    const parsedHours = parseFloat(hours);
+                    hoursData[selectedDate] = parsedHours;
+                    monthHoursData[selectedDate] = parsedHours;
                     renderCalendar();
                     closeModal();
                 } else {
@@ -506,7 +655,7 @@ $current_year = $_GET['year'] ?? date('Y');
             formData.append('date', selectedDate);
             formData.append('delete', 'true');
 
-            fetch('../api/hours.php', {
+            fetch('../../../api/hours.php', {
                 method: 'POST',
                 body: formData
             })
@@ -514,9 +663,22 @@ $current_year = $_GET['year'] ?? date('Y');
             .then(data => {
                 if (data.success) {
                     delete hoursData[selectedDate];
+                    delete monthHoursData[selectedDate];
                     renderCalendar();
-            let newMonth = parseInt(currentMonth) - 1;
-            let newYear = parseInt(currentYear);
+                    closeModal();
+                } else {
+                    alert(data.error || 'Error deleting entry');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting entry');
+            });
+        }
+
+        function previousMonth() {
+            let newMonth = currentMonth - 1;
+            let newYear = currentYear;
             
             if (newMonth < 1) {
                 newMonth = 12;
@@ -527,31 +689,19 @@ $current_year = $_GET['year'] ?? date('Y');
         }
 
         function nextMonth() {
-            let newMonth = parseInt(currentMonth) + 1;
-            let newYear = parseInt(currentYear);
+            let newMonth = currentMonth + 1;
+            let newYear = currentYear;
             
             if (newMonth > 12) {
                 newMonth = 1;
                 newYear++;
             }
             
-            window.location.href = '?month=' + newMonth + '&year=' + newYearMonth = 12;
-                currentYear--;
-            }
-            loadHours();
-        }
-
-        function nextMonth() {
-            currentMonth++;
-            if (currentMonth > 12) {
-                currentMonth = 1;
-                currentYear++;
-            }
-            loadHours();
+            window.location.href = '?month=' + newMonth + '&year=' + newYear;
         }
 
         function updateStats() {
-            const monthTotal = Object.values(hoursData).reduce((sum, val) => sum + parseFloat(val), 0);
+            const monthTotal = Object.values(monthHoursData).reduce((sum, val) => sum + parseFloat(val), 0);
             document.getElementById('month-total').textContent = monthTotal.toFixed(1);
 
             // Today's hours
@@ -562,9 +712,81 @@ $current_year = $_GET['year'] ?? date('Y');
             document.getElementById('today-hours').textContent = (hoursData[todayStr] || 0).toFixed(1);
 
             // Average
-            const daysLogged = Object.keys(hoursData).length;
+            const daysLogged = Object.keys(monthHoursData).length;
             const average = daysLogged > 0 ? (monthTotal / daysLogged) : 0;
             document.getElementById('average-hours').textContent = average.toFixed(1);
+        }
+
+        function updateTotalHours() {
+            const total = Object.values(allHoursData).reduce((sum, val) => sum + parseFloat(val), 0);
+            document.getElementById('total-hours').textContent = total.toFixed(1);
+        }
+
+        function applyFilter() {
+            const fromDate = document.getElementById('filter-from-date').value;
+            const toDate = document.getElementById('filter-to-date').value;
+            
+            if (!fromDate || !toDate) {
+                alert('Please select both dates');
+                return;
+            }
+            
+            if (fromDate > toDate) {
+                alert('From date must be before to date');
+                return;
+            }
+            
+            filterFromDate = fromDate;
+            filterToDate = toDate;
+            
+            loadFilteredHours();
+        }
+
+        function resetFilter() {
+            filterFromDate = null;
+            filterToDate = null;
+            setDefaultDates();
+            loadAllHours();
+            document.getElementById('filtered-total').textContent = '0';
+            document.getElementById('filtered-label').textContent = 'Filtered Total';
+            renderCalendar();
+        }
+
+        function loadFilteredHours() {
+            const params = new URLSearchParams();
+            params.append('from_date', filterFromDate);
+            params.append('to_date', filterToDate);
+            
+            fetch('../../../api/hours.php?' + params.toString())
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        hoursData = data.hours;
+                        updateFilteredTotal();
+                        renderCalendar();
+                    }
+                })
+                .catch(error => console.error('Error loading filtered hours:', error));
+        }
+
+        function updateFilteredTotal() {
+            const filteredTotal = Object.values(hoursData).reduce((sum, val) => sum + parseFloat(val), 0);
+            document.getElementById('filtered-total').textContent = filteredTotal.toFixed(1);
+            
+            if (filterFromDate && filterToDate) {
+                const formattedFrom = formatDate(filterFromDate);
+                const formattedTo = formatDate(filterToDate);
+                document.getElementById('filtered-label').textContent = `${formattedFrom} to ${formattedTo} Total`;
+            } else {
+                document.getElementById('filtered-label').textContent = 'Filtered Total';
+            }
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const [y, m, d] = dateStr.split('-');
+            return `${months[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
         }
 
         // Close modal on escape
@@ -581,5 +803,6 @@ $current_year = $_GET['year'] ?? date('Y');
             }
         });
     </script>
+    <?php require_once '../../components/footer.php'; ?>
 </body>
 </html>
