@@ -1,7 +1,7 @@
 <div class="auth-container">
     <div class="auth-box">
         <h2>Login to OurTracker</h2>
-        <form action="/auth/login" method="POST">
+        <form action="../auth/login.php" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>

@@ -1,7 +1,7 @@
 <div class="auth-container">
     <div class="auth-box">
         <h2>Register for OurTracker</h2>
-        <form action="/auth/register" method="POST">
+        <form action="../auth/register.php" method="POST">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required>
@@ -22,8 +22,8 @@
                 <label for="role">Role</label>
                 <select id="role" name="role" required>
                     <option value="">Select Role</option>
-                    <option value="intern">Intern</option>
-                    <option value="supervisor">Supervisor</option>
+                    <option value="Intern">Intern</option>
+                    <option value="Admin">Admin</option>
                 </select>
             </div>
             <button type="submit" class="btn-primary">Register</button>
