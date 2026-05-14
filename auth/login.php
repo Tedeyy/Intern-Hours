@@ -14,7 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
-        if ($user && password_verify($password, $user['password'])) {
+        if ($user) {
+            $secret_key = getenv('SECRET_KEY') ?: 'default-secret-key';
+            $hashed_password = hash_hmac('sha256', $password, $secret_key);
+            
+            if (hash_equals($user['password'], $hashed_password)) {
             // Start session and store user info
             session_start();
             $_SESSION['user_id'] = $user['id'];
@@ -29,9 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: ../views/pages/intern/dashboard.php");
             }
             exit;
-        } else {
-            $error = "Invalid email or password.";
+            }
         }
+        $error = "Invalid email or password.";
     }
 }
 ?>

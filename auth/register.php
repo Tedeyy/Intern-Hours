@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Email already registered.";
         } else {
             // Insert new user
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $secret_key = getenv('SECRET_KEY') ?: 'default-secret-key';
+            $hashed_password = hash_hmac('sha256', $password, $secret_key);
             $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
             
             try {
