@@ -116,6 +116,34 @@
   font-weight: 600;
 }
 
+.absence-badge {
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.absence-badge.pending {
+  background: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ffe0b2;
+}
+
+.absence-badge.approved {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.absence-badge.rejected {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
 .stats-sidebar {
   display: flex;
   flex-direction: column;

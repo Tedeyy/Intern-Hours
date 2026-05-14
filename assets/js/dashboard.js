@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     setDefaultDates();
     loadAllHours();
+    loadAbsences();
     loadHours();
     renderCalendar();
 });
@@ -97,15 +98,78 @@ function renderCalendar() {
         cell.innerHTML = `
             <div class="day-cell-date">${day}</div>
             ${hoursData[fullDate] ? `<div class="day-cell-hours">${hoursData[fullDate]}h</div>` : ''}
+            ${absencesData[fullDate] ? `<div class="absence-badge ${absencesData[fullDate].status.toLowerCase()}">${absencesData[fullDate].status}</div>` : ''}
         `;
 
         if (!isFuture) {
             cell.onclick = () => openLogModal(fullDate);
+        } else {
+            cell.onclick = () => openAbsenceModal(fullDate);
         }
         calendarGrid.appendChild(cell);
     }
 
     updateStats();
+}
+
+function loadAbsences() {
+    fetch('../../../api/absences.php?month=' + currentMonth + '&year=' + currentYear)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                absencesData = {};
+                data.absences.forEach(abs => {
+                    absencesData[abs.date] = abs;
+                });
+                renderCalendar();
+            }
+        })
+        .catch(error => console.error('Error loading absences:', error));
+}
+
+function openAbsenceModal(dateStr) {
+    selectedDate = dateStr;
+    document.getElementById('absence-modal-date').value = dateStr;
+    document.getElementById('absence-modal-reason').value = absencesData[dateStr] ? absencesData[dateStr].reason : '';
+    document.getElementById('absence-modal').classList.add('active');
+    document.getElementById('absence-modal-reason').focus();
+}
+
+function closeAbsenceModal() {
+    document.getElementById('absence-modal').classList.remove('active');
+    selectedDate = null;
+}
+
+function saveAbsence() {
+    const reason = document.getElementById('absence-modal-reason').value;
+    
+    if (reason.trim() === '') {
+        alert('Please provide a reason for your absence');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'apply');
+    formData.append('date', selectedDate);
+    formData.append('reason', reason);
+
+    fetch('../../../api/absences.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadAbsences();
+            closeAbsenceModal();
+        } else {
+            alert(data.error || 'Error submitting request');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting request');
+    });
 }
 
 function loadHours() {
@@ -321,5 +385,11 @@ document.addEventListener('keydown', function(e) {
 document.getElementById('log-modal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeModal();
+    }
+});
+
+document.getElementById('absence-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeAbsenceModal();
     }
 });

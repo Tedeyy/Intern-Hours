@@ -117,12 +117,32 @@ require_once '../../components/header.php';
         </div>
     </div>
 
+    <!-- Absence Modal -->
+    <div class="modal" id="absence-modal">
+        <div class="modal-content">
+            <div class="modal-header">Apply for Absence</div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="text" id="absence-modal-date" readonly style="background: #f5f5f5;">
+            </div>
+            <div class="form-group">
+                <label>Reason for Absence</label>
+                <textarea id="absence-modal-reason" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; font-size: 14px; box-sizing: border-box;" placeholder="Explain why you will be absent..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="saveAbsence()">Submit Request</button>
+                <button class="btn-cancel" onclick="closeAbsenceModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentMonth = parseInt('<?php echo $current_month; ?>');
         let currentYear = parseInt('<?php echo $current_year; ?>');
         let userId = parseInt('<?php echo $user_id; ?>');
         let selectedDate = null;
         let hoursData = {};
+        let absencesData = {};
         let monthHoursData = {};
         let allHoursData = {};
         let filterFromDate = null;
