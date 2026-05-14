@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../config.php';
 
+session_start();
+
 $google_client_id = getenv('GOOGLE_CLIENT_ID');
 $google_client_secret = getenv('GOOGLE_CLIENT_SECRET');
 $google_redirect_uri = getenv('GOOGLE_REDIRECT_URI') ?: 'http://localhost/Intern-Hours/auth/google-callback.php';

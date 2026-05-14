@@ -195,6 +195,6 @@ function togglePassword(inputId) {
 }
 
 function loginWithGoogle() {
-    window.location.href = '../../api/google-login.php';
+    window.location.href = '../api/google-login.php';
 }
 </script>
