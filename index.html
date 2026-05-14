@@ -8,17 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      * {
-        font-family: 'Inter', sans-serif;
-      }
-      .gradient-bg {
-        background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
-      }
-      .feature-card:hover {
-        transform: translateY(-5px);
-      }
-    </style>
+    <link rel="stylesheet" href="assets/css/index.css">
   </head>
 
   <body class="bg-gray-50">
@@ -35,8 +25,8 @@
             <a href="#contact" class="text-gray-600 hover:text-gray-900 transition">Contact</a>
           </div>
           <div class="flex space-x-4">
-            <button class="px-4 py-2 text-gray-900 hover:text-black font-medium transition">Login</button>
-            <button class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-black font-medium transition">Sign Up</button>
+            <a href="views/feed.php" class="px-4 py-2 text-gray-900 hover:text-black font-medium transition">Login</a>
+            <a href="views/feed.php?page=register" class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-black font-medium transition">Sign Up</a>
           </div>
         </div>
       </div>
@@ -52,12 +42,12 @@
           A simple, efficient way for interns to log hours and for supervisors to track progress. Stay organized and never miss a beat.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button class="px-8 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+          <a href="views/feed.php?page=register" class="px-8 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg inline-block">
             Get Started Free
-          </button>
-          <button class="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition">
+          </a>
+          <a href="#features" class="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition inline-block">
             Learn More
-          </button>
+          </a>
         </div>
       </div>
     </section>
@@ -133,9 +123,9 @@
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Start Tracking?</h2>
         <p class="text-xl text-gray-200 mb-8">Join thousands of interns and supervisors who trust OurTracker for time tracking.</p>
-        <button class="px-8 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+        <a href="views/feed.php?page=register" class="px-8 py-4 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg inline-block">
           Create Free Account
-        </button>
+        </a>
       </div>
     </section>
 
