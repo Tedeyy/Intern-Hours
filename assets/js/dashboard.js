@@ -3,13 +3,19 @@
 
 // Initialize calendar
 document.addEventListener('DOMContentLoaded', function() {
-    setDefaultDates();
+    if (document.getElementById('filter-from-date')) {
+        setDefaultDates();
+    }
     loadAllHours();
     loadAbsences();
     loadHours();
     loadInterns();
     renderCalendar();
 });
+
+function getUserIdQuery() {
+    return typeof userId !== 'undefined' ? '&userId=' + userId : '';
+}
 
 function loadInterns() {
     const list = document.getElementById('interns-list');
@@ -56,7 +62,7 @@ function setDefaultDates() {
 }
 
 function loadAllHours() {
-    fetch('../../../api/hours.php?all=true')
+    fetch('../../../api/hours.php?all=true' + getUserIdQuery())
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -150,7 +156,7 @@ function renderCalendar() {
 }
 
 function loadAbsences() {
-    fetch('../../../api/absences.php?month=' + currentMonth + '&year=' + currentYear)
+    fetch('../../../api/absences.php?month=' + currentMonth + '&year=' + currentYear + getUserIdQuery())
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -260,7 +266,7 @@ function deleteAbsence() {
 }
 
 function loadHours() {
-    fetch('../../../api/hours.php?month=' + currentMonth + '&year=' + currentYear)
+    fetch('../../../api/hours.php?month=' + currentMonth + '&year=' + currentYear + getUserIdQuery())
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -349,44 +355,53 @@ function deleteHours() {
 }
 
 function previousMonth() {
-    let newMonth = currentMonth - 1;
-    let newYear = currentYear;
-    
-    if (newMonth < 1) {
-        newMonth = 12;
-        newYear--;
+    currentMonth--;
+    if (currentMonth < 1) {
+        currentMonth = 12;
+        currentYear--;
     }
-    
-    window.location.href = '?month=' + newMonth + '&year=' + newYear;
+    updateCalendarData();
 }
 
 function nextMonth() {
-    let newMonth = currentMonth + 1;
-    let newYear = currentYear;
-    
-    if (newMonth > 12) {
-        newMonth = 1;
-        newYear++;
+    currentMonth++;
+    if (currentMonth > 12) {
+        currentMonth = 1;
+        currentYear++;
     }
-    
-    window.location.href = '?month=' + newMonth + '&year=' + newYear;
+    updateCalendarData();
+}
+
+function updateCalendarData() {
+    // Update URL without refreshing
+    const params = new URLSearchParams(window.location.search);
+    params.set('month', currentMonth);
+    params.set('year', currentYear);
+    window.history.pushState({}, '', '?' + params.toString());
+
+    // Reload data
+    loadHours();
+    loadAbsences();
 }
 
 function updateStats() {
     const monthTotal = Object.values(monthHoursData).reduce((sum, val) => sum + parseFloat(val), 0);
-    document.getElementById('month-total').textContent = monthTotal.toFixed(1);
+    const monthTotalEl = document.getElementById('month-total');
+    if (monthTotalEl) monthTotalEl.textContent = monthTotal.toFixed(1);
 
     // Today's hours
     const today = new Date();
     const todayStr = today.getFullYear() + '-' + 
         String(today.getMonth() + 1).padStart(2, '0') + '-' + 
         String(today.getDate()).padStart(2, '0');
-    document.getElementById('today-hours').textContent = (hoursData[todayStr] || 0).toFixed(1);
+    const todayHoursEl = document.getElementById('today-hours');
+    if (todayHoursEl) todayHoursEl.textContent = (hoursData[todayStr] || 0).toFixed(1);
 
     // Average
     const daysLogged = Object.keys(monthHoursData).length;
     const average = daysLogged > 0 ? (monthTotal / daysLogged) : 0;
-    document.getElementById('average-hours').textContent = average.toFixed(1);
+    const averageEl = document.getElementById('average-hours');
+    if (averageEl) averageEl.textContent = average.toFixed(1);
 }
 
 function updateTotalHours() {
@@ -429,7 +444,7 @@ function loadFilteredHours() {
     params.append('from_date', filterFromDate);
     params.append('to_date', filterToDate);
     
-    fetch('../../../api/hours.php?' + params.toString())
+    fetch('../../../api/hours.php?' + params.toString() + getUserIdQuery())
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -443,14 +458,18 @@ function loadFilteredHours() {
 
 function updateFilteredTotal() {
     const filteredTotal = Object.values(hoursData).reduce((sum, val) => sum + parseFloat(val), 0);
-    document.getElementById('filtered-total').textContent = filteredTotal.toFixed(1);
+    const filteredTotalEl = document.getElementById('filtered-total');
+    if (filteredTotalEl) filteredTotalEl.textContent = filteredTotal.toFixed(1);
     
-    if (filterFromDate && filterToDate) {
-        const formattedFrom = formatDate(filterFromDate);
-        const formattedTo = formatDate(filterToDate);
-        document.getElementById('filtered-label').textContent = `${formattedFrom} to ${formattedTo} Total`;
-    } else {
-        document.getElementById('filtered-label').textContent = 'Filtered Total';
+    const filteredLabelEl = document.getElementById('filtered-label');
+    if (filteredLabelEl) {
+        if (filterFromDate && filterToDate) {
+            const formattedFrom = formatDate(filterFromDate);
+            const formattedTo = formatDate(filterToDate);
+            filteredLabelEl.textContent = `${formattedFrom} to ${formattedTo} Total`;
+        } else {
+            filteredLabelEl.textContent = 'Filtered Total';
+        }
     }
 }
 
@@ -465,18 +484,25 @@ function formatDate(dateStr) {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeModal();
+        closeAbsenceModal();
     }
 });
 
 // Close modal on outside click
-document.getElementById('log-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeModal();
-    }
-});
+const logModal = document.getElementById('log-modal');
+if (logModal) {
+    logModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+}
 
-document.getElementById('absence-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeAbsenceModal();
-    }
-});
+const absenceModal = document.getElementById('absence-modal');
+if (absenceModal) {
+    absenceModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAbsenceModal();
+        }
+    });
+}

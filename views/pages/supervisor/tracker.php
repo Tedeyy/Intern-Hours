@@ -44,7 +44,7 @@ require_once '../../components/header.php';
         margin-bottom: 10px;
     }
     /* Hide log hours interaction for supervisors on this page */
-    .calendar-day:not(.empty) {
+    .day-cell:not(.other-month) {
         cursor: default !important;
     }
 </style>
@@ -84,6 +84,29 @@ require_once '../../components/header.php';
                 <div class="stat-value">
                     <span id="month-total">0</span>
                     <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label" id="filtered-label">Filtered Total</div>
+                <div class="stat-value">
+                    <span id="filtered-total">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="stat-label">Filter by Date</div>
+                <div class="filter-group">
+                    <label>From Date</label>
+                    <input type="date" id="filter-from-date">
+                </div>
+                <div class="filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="filter-to-date">
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn-filter" onclick="applyFilter()">Apply</button>
+                    <button class="btn-reset" onclick="resetFilter()">Reset</button>
                 </div>
             </div>
         </div>
