@@ -10,21 +10,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'Admin') {
 $base_url = "../../../";
 require_once '../../components/header.php';
 ?>
-<style>
-    .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
-        min-height: 60vh;
-    }
-    .welcome-card {
-        background: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        text-align: center;
-    }
-</style>
+<link rel="stylesheet" href="../../../assets/css/supervisor-dashboard.css">
 </head>
 <body class="bg-gray-50">
     <?php require_once '../../components/navbar.php'; ?>
