@@ -120,7 +120,8 @@ require_once '../../components/header.php';
     <!-- Absence Modal -->
     <div class="modal" id="absence-modal">
         <div class="modal-content">
-            <div class="modal-header">Apply for Absence</div>
+            <div class="modal-header">Absence Request</div>
+            <div id="absence-status-display" style="margin-bottom: 15px; padding: 8px; border-radius: 4px; font-weight: 600; text-align: center; display: none;"></div>
             <div class="form-group">
                 <label>Date</label>
                 <input type="text" id="absence-modal-date" readonly style="background: #f5f5f5;">
@@ -130,8 +131,9 @@ require_once '../../components/header.php';
                 <textarea id="absence-modal-reason" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; font-size: 14px; box-sizing: border-box;" placeholder="Explain why you will be absent..."></textarea>
             </div>
             <div class="modal-buttons">
-                <button class="btn-save" onclick="saveAbsence()">Submit Request</button>
-                <button class="btn-cancel" onclick="closeAbsenceModal()">Cancel</button>
+                <button class="btn-save" id="absence-submit-btn" onclick="saveAbsence()">Submit Request</button>
+                <button class="btn-delete" id="absence-delete-btn" style="display: none;" onclick="deleteAbsence()">Cancel Request</button>
+                <button class="btn-cancel" onclick="closeAbsenceModal()">Close</button>
             </div>
         </div>
     </div>

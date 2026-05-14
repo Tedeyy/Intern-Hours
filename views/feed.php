@@ -32,7 +32,7 @@ require_once __DIR__ . '/components/header.php';
     <?php
     switch ($page) {
         case 'register':
-            require_once __DIR__ . '/pages/auth/regitry.php';
+            require_once __DIR__ . '/pages/auth/registry.php';
             break;
         case 'login':
         default:

@@ -129,8 +129,28 @@ function loadAbsences() {
 
 function openAbsenceModal(dateStr) {
     selectedDate = dateStr;
+    const absence = absencesData[dateStr];
+    const statusDisplay = document.getElementById('absence-status-display');
+    const deleteBtn = document.getElementById('absence-delete-btn');
+    const submitBtn = document.getElementById('absence-submit-btn');
+
     document.getElementById('absence-modal-date').value = dateStr;
-    document.getElementById('absence-modal-reason').value = absencesData[dateStr] ? absencesData[dateStr].reason : '';
+    document.getElementById('absence-modal-reason').value = absence ? absence.reason : '';
+
+    if (absence) {
+        statusDisplay.textContent = 'Status: ' + absence.status;
+        statusDisplay.className = 'absence-badge ' + absence.status.toLowerCase();
+        statusDisplay.style.display = 'block';
+        statusDisplay.style.fontSize = '14px';
+        statusDisplay.style.padding = '10px';
+        deleteBtn.style.display = 'block';
+        submitBtn.textContent = 'Update Reason';
+    } else {
+        statusDisplay.style.display = 'none';
+        deleteBtn.style.display = 'none';
+        submitBtn.textContent = 'Submit Request';
+    }
+
     document.getElementById('absence-modal').classList.add('active');
     document.getElementById('absence-modal-reason').focus();
 }
@@ -169,6 +189,36 @@ function saveAbsence() {
     .catch(error => {
         console.error('Error:', error);
         alert('Error submitting request');
+    });
+}
+
+function deleteAbsence() {
+    if (!confirm('Are you sure you want to cancel this absence request?')) return;
+
+    const absence = absencesData[selectedDate];
+    if (!absence) return;
+
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', absence.absences_id);
+
+    fetch('../../../api/absences.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            delete absencesData[selectedDate];
+            loadAbsences();
+            closeAbsenceModal();
+        } else {
+            alert(data.error || 'Error deleting request');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting request');
     });
 }
 

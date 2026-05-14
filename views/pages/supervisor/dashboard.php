@@ -57,8 +57,8 @@ require_once '../../components/header.php';
                                     <p class="text-gray-700 mt-2"><strong>Reason:</strong> ${abs.reason || 'No reason provided'}</p>
                                 </div>
                                 <div class="flex gap-2 mt-4 md:mt-0">
-                                    <button onclick="handleAbsence(${abs.id}, 'approve')" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition font-bold">Approve</button>
-                                    <button onclick="handleAbsence(${abs.id}, 'reject')" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-bold">Reject</button>
+                                    <button onclick="handleAbsence(${abs.absences_id}, 'approve')" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition font-bold">Approve</button>
+                                    <button onclick="handleAbsence(${abs.absences_id}, 'reject')" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-bold">Reject</button>
                                 </div>
                             `;
                             list.appendChild(card);

@@ -37,5 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+    // Redirect back with error if set
+    if (isset($error)) {
+        header("Location: ../views/feed.php?page=register&error=" . urlencode($error));
+        exit;
+    }
+} else {
+    // If someone tries to access this file directly via GET
+    header("Location: ../views/feed.php?page=register");
+    exit;
 }
 ?>

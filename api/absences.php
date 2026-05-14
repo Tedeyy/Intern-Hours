@@ -16,7 +16,7 @@ $user_role = $_SESSION['user_role'];
 try {
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS absences (
-            id INT PRIMARY KEY AUTO_INCREMENT,
+            absences_id INT PRIMARY KEY AUTO_INCREMENT,
             user_id INT NOT NULL,
             date DATE NOT NULL,
             reason TEXT,
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $status = ($action === 'approve') ? 'Approved' : 'Rejected';
 
         try {
-            $stmt = $pdo->prepare("UPDATE absences SET status = ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE absences SET status = ? WHERE absences_id = ?");
             $stmt->execute([$status, $id]);
             echo json_encode(['success' => true, 'message' => 'Request ' . $status]);
         } catch (Exception $e) {
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Interns can only delete their own pending/rejected requests? 
             // For now let's allow it if it's theirs
-            $stmt = $pdo->prepare("DELETE FROM absences WHERE id = ? AND (user_id = ? OR ? = 'Admin')");
+            $stmt = $pdo->prepare("DELETE FROM absences WHERE absences_id = ? AND (user_id = ? OR ? = 'Admin')");
             $stmt->execute([$id, $user_id, $user_role]);
             echo json_encode(['success' => true, 'message' => 'Request deleted']);
         } catch (Exception $e) {

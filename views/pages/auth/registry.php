@@ -1,7 +1,12 @@
 <div class="auth-container">
     <div class="auth-box">
         <h2>Register for OurTracker</h2>
-        <form action="../auth/register.php" method="POST">
+        <?php if (isset($_GET['error'])): ?>
+            <div class="validation-message error" style="margin-bottom: 20px; text-align: center;">
+                <?php echo htmlspecialchars($_GET['error']); ?>
+            </div>
+        <?php endif; ?>
+        <form action="../api/register.php" method="POST">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required>
