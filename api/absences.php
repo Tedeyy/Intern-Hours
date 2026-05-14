@@ -32,43 +32,50 @@ try {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // If admin/supervisor, they can see all or pending requests
-    if ($user_role === 'Admin') {
-        if (isset($_GET['pending']) && $_GET['pending'] === 'true') {
-            $stmt = $pdo->prepare("
-                SELECT a.*, u.name as intern_name 
-                FROM absences a 
-                JOIN users u ON a.user_id = u.id 
-                WHERE a.status = 'Pending' 
-                ORDER BY a.date ASC
-            ");
-            $stmt->execute();
-        } else {
-            $stmt = $pdo->prepare("
-                SELECT a.*, u.name as intern_name 
-                FROM absences a 
-                JOIN users u ON a.user_id = u.id 
-                ORDER BY a.date DESC
-            ");
-            $stmt->execute();
-        }
-    } else {
-        // Interns only see their own
-        if (isset($_GET['month']) && isset($_GET['year'])) {
-            $month = $_GET['month'];
-            $year = $_GET['year'];
-            $startDate = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-01';
-            $endDate = date('Y-m-t', strtotime($startDate));
+    $target_user_id = $user_id;
+    if ($user_role === 'Admin' && isset($_GET['userId'])) {
+        $target_user_id = $_GET['userId'];
+    }
 
-            $stmt = $pdo->prepare("
-                SELECT * FROM absences 
-                WHERE user_id = ? AND date BETWEEN ? AND ?
-            ");
-            $stmt->execute([$user_id, $startDate, $endDate]);
-        } else {
-            $stmt = $pdo->prepare("SELECT * FROM absences WHERE user_id = ?");
-            $stmt->execute([$user_id]);
-        }
+    // If admin/supervisor is looking for pending requests (global list)
+    if ($user_role === 'Admin' && isset($_GET['pending']) && $_GET['pending'] === 'true') {
+        $stmt = $pdo->prepare("
+            SELECT a.*, u.name as intern_name 
+            FROM absences a 
+            JOIN users u ON a.user_id = u.id 
+            WHERE a.status = 'Pending' 
+            ORDER BY a.date ASC
+        ");
+        $stmt->execute();
+    } 
+    // Monthly view (for calendar)
+    elseif (isset($_GET['month']) && isset($_GET['year'])) {
+        $month = $_GET['month'];
+        $year = $_GET['year'];
+        $startDate = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-01';
+        $endDate = date('Y-m-t', strtotime($startDate));
+
+        $stmt = $pdo->prepare("
+            SELECT * FROM absences 
+            WHERE user_id = ? AND date BETWEEN ? AND ?
+        ");
+        $stmt->execute([$target_user_id, $startDate, $endDate]);
+    }
+    // Single user history
+    elseif ($user_role === 'Admin' && isset($_GET['userId'])) {
+        $stmt = $pdo->prepare("
+            SELECT a.*, u.name as intern_name 
+            FROM absences a 
+            JOIN users u ON a.user_id = u.id 
+            WHERE a.user_id = ?
+            ORDER BY a.date DESC
+        ");
+        $stmt->execute([$target_user_id]);
+    }
+    // Default: current user's history
+    else {
+        $stmt = $pdo->prepare("SELECT * FROM absences WHERE user_id = ? ORDER BY date DESC");
+        $stmt->execute([$user_id]);
     }
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -3,6 +3,12 @@
   grid-template-columns: 1fr 300px;
   gap: 20px;
   padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.full-width {
+    grid-column: 1 / -1;
 }
 
 .calendar-section {

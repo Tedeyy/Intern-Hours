@@ -10,6 +10,12 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$user_role = $_SESSION['user_role'] ?? 'Intern';
+
+// Allow admins to view other users' hours
+if ($user_role === 'Admin' && isset($_GET['userId'])) {
+    $user_id = $_GET['userId'];
+}
 
 // Ensure hours table exists
 try {

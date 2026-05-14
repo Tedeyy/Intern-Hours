@@ -18,7 +18,7 @@ require_once '../../components/header.php';
     <div class="dashboard-container">
         <div class="welcome-card">
             <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome, Supervisor <?php echo htmlspecialchars($_SESSION['user_name']); ?></h1>
-            <p class="text-gray-600 mb-6">Manage intern hours and absence requests from this dashboard.</p>
+            <p class="text-gray-600 mb-6">Managing interns for <strong><?php echo htmlspecialchars($_SESSION['office_name'] ?? 'N/A'); ?></strong> | <?php echo htmlspecialchars($_SESSION['organization_name'] ?? 'N/A'); ?></p>
         </div>
 
         <div class="absence-requests-section mt-8">
@@ -27,12 +27,63 @@ require_once '../../components/header.php';
                 <p class="text-gray-500 italic">Loading requests...</p>
             </div>
         </div>
+
+        <div class="interns-section mt-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Interns in Your Office</h2>
+            <div id="interns-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <p class="text-gray-500 italic">Loading interns...</p>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             loadPendingAbsences();
+            loadInterns();
         });
+
+        function loadInterns() {
+            fetch('../../../api/interns.php')
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById('interns-list');
+                    if (data.success) {
+                        if (data.interns.length === 0) {
+                            list.innerHTML = '<div class="welcome-card"><p class="text-gray-500">No interns found in your office.</p></div>';
+                            return;
+                        }
+
+                        list.innerHTML = '';
+                        data.interns.forEach(intern => {
+                            const card = document.createElement('div');
+                            card.className = 'welcome-card text-left';
+                            card.style.textAlign = 'left';
+                            card.innerHTML = `
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold text-xl">
+                                        ${intern.name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg">${intern.name}</h3>
+                                        <p class="text-gray-600 text-sm">${intern.email}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 flex justify-between items-center">
+                                    <span class="text-xs text-gray-500">Intern</span>
+                                    <a href="tracker.php?id=${intern.id}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">View Logs →</a>
+                                </div>
+                            `;
+                            list.appendChild(card);
+                        });
+                    } else {
+                        list.innerHTML = '<p class="text-red-500">Error loading interns.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('interns-list').innerHTML = '<p class="text-red-500">Failed to connect to server.</p>';
+                });
+        }
 
         function loadPendingAbsences() {
             fetch('../../../api/absences.php?pending=true')
