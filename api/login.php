@@ -35,6 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_role'] = $user['role'];
+            $_SESSION['office_id'] = $user['office_id'];
+            $_SESSION['organization_id'] = $user['organization_id'];
+
+            // Fetch names for session
+            $stmt = $pdo->prepare("SELECT office_name FROM office WHERE id = ?");
+            $stmt->execute([$user['office_id']]);
+            $_SESSION['office_name'] = $stmt->fetchColumn();
+
+            $stmt = $pdo->prepare("SELECT organization_name FROM organization WHERE id = ?");
+            $stmt->execute([$user['organization_id']]);
+            $_SESSION['organization_name'] = $stmt->fetchColumn();
 
             // Reset failed attempts on successful login
             unset($_SESSION['failed_attempts']);

@@ -7,8 +7,45 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllHours();
     loadAbsences();
     loadHours();
+    loadInterns();
     renderCalendar();
 });
+
+function loadInterns() {
+    const list = document.getElementById('interns-list');
+    if (!list) return;
+
+    fetch('../../../api/interns.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.interns.length === 0) {
+                    list.innerHTML = '<p class="text-gray-500 text-sm">No colleagues found.</p>';
+                    return;
+                }
+
+                list.innerHTML = '';
+                data.interns.forEach(intern => {
+                    // Skip self
+                    if (intern.id === userId) return;
+
+                    const div = document.createElement('div');
+                    div.className = 'flex flex-col items-center gap-2';
+                    div.innerHTML = `
+                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 font-bold text-sm" title="${intern.email}">
+                            ${intern.name.charAt(0)}
+                        </div>
+                        <span class="text-xs text-gray-600 truncate w-full text-center">${intern.name.split(' ')[0]}</span>
+                    `;
+                    list.appendChild(div);
+                });
+
+                if (list.children.length === 0) {
+                    list.innerHTML = '<p class="text-gray-500 text-sm">No other colleagues.</p>';
+                }
+            }
+        });
+}
 
 function setDefaultDates() {
     const today = new Date();

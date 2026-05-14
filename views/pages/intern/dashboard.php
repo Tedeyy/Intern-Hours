@@ -21,6 +21,10 @@ require_once '../../components/header.php';
 <body>
     <?php require_once '../../components/navbar.php'; ?>
     <div class="dashboard-container">
+        <div class="welcome-card full-width mb-6" style="background: white; padding: 20px; border-radius: 12px; shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h1 class="text-2xl font-bold text-gray-900">Welcome, <?php echo htmlspecialchars($user_name); ?></h1>
+            <p class="text-gray-600"><?php echo htmlspecialchars($_SESSION['office_name'] ?? 'N/A'); ?> | <?php echo htmlspecialchars($_SESSION['organization_name'] ?? 'N/A'); ?></p>
+        </div>
         <div class="calendar-section">
 
             <div class="calendar-header">
@@ -93,6 +97,14 @@ require_once '../../components/header.php';
                     <button class="btn-filter" onclick="applyFilter()">Apply</button>
                     <button class="btn-reset" onclick="resetFilter()">Reset</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Sections below calendar and sidebar -->
+        <div class="colleagues-section full-width mt-6" style="background: white; padding: 20px; border-radius: 12px; shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px;">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Your Colleagues</h3>
+            <div id="interns-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <p class="text-gray-500 italic text-sm">Loading colleagues...</p>
             </div>
         </div>
     </div>

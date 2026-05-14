@@ -43,6 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 ORDER BY a.date ASC
             ");
             $stmt->execute();
+        } elseif (isset($_GET['userId'])) {
+            // Specific intern's history
+            $stmt = $pdo->prepare("
+                SELECT a.*, u.name as intern_name 
+                FROM absences a 
+                JOIN users u ON a.user_id = u.id 
+                WHERE a.user_id = ?
+                ORDER BY a.date DESC
+            ");
+            $stmt->execute([$_GET['userId']]);
         } else {
             $stmt = $pdo->prepare("
                 SELECT a.*, u.name as intern_name 
