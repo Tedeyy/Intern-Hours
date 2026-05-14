@@ -1,4 +1,18 @@
 <?php
+session_start();
+
+// If user is already logged in, redirect to their dashboard
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
+    $role = $_SESSION['user_role'];
+    
+    if ($role === 'Admin') {
+        header("Location: pages/supervisor/dashboard.php");
+    } else {
+        header("Location: pages/intern/dashboard.php");
+    }
+    exit;
+}
+
 $page = $_GET['page'] ?? 'login';
 $showNavbar = !in_array($page, ['login', 'register']);
 ?>

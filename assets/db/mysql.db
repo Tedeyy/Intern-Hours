@@ -19,9 +19,8 @@ CREATE TABLE IF NOT EXISTS hours (
   user_id int NOT NULL,
   date date NOT NULL,
   hours decimal(5,2) NOT NULL,
-  created_at timestamp NOT NULL DEFAULT current_timestamp()
-
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  created_at timestamp NOT NULL DEFAULT current_timestamp(),
+  FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS absences (
@@ -29,13 +28,13 @@ CREATE TABLE IF NOT EXISTS absences (
   user_id int NOT NULL,
   date date NOT NULL,
   reason text,
+  status enum('Pending', 'Approved', 'Rejected') DEFAULT 'Pending' NOT NULL,
   approved_by int,
   created_at datetime DEFAULT current_timestamp(),
   updated_at datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-
-  FOREIGN KEY (user_id) REFERENCES users (user_id),
-  FOREIGn KEY (approved_by) REFERENCES users (user_id)
-)
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (approved_by) REFERENCES users (id)
+);
 
 CREATE TABLE IF NOT EXISTS accomplishment (
   accomplishment_id int AUTO_INCREMENT PRIMARY KEY,
@@ -45,6 +44,5 @@ CREATE TABLE IF NOT EXISTS accomplishment (
   accomplishment text,
   created_at datetime DEFAULT current_timestamp(),
   updated_at datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
 );
