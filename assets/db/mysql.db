@@ -1,50 +1,84 @@
 Create database intern_hours_db;
 use intern_hours_db;
 
+CREATE TABLE IF NOT EXISTS office (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  office_name VARCHAR(255) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() 
+    ON UPDATE CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS organization (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  organization_name VARCHAR(255) NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() 
+    ON UPDATE CURRENT_TIMESTAMP()
+);
+
 CREATE TABLE IF NOT EXISTS users (
-  id int AUTO_INCREMENT PRIMARY KEY,
-  google_id text DEFAULT NULL,
-  google_refresh_token text DEFAULT NULL,
-  google_access_token text DEFAULT NULL,
-  name varchar(255) NOT NULL,
-  email varchar(255) unique NOT NULL,
-  password varchar(255) NOT NULL,
-  role enum('Intern', 'Admin') NOT NULL,
-  created_at datetime DEFAULT current_timestamp(),
-  updated_at datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  google_id TEXT DEFAULT NULL,
+  google_refresh_token TEXT DEFAULT NULL,
+  google_access_token TEXT DEFAULT NULL,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('Intern', 'Admin') NOT NULL,
+  office_id INT NOT NULL,
+  organization_id INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() 
+    ON UPDATE CURRENT_TIMESTAMP(),
+
+  CONSTRAINT fk_users_office
+    FOREIGN KEY (office_id) REFERENCES office(id),
+
+  CONSTRAINT fk_users_organization
+    FOREIGN KEY (organization_id) REFERENCES organization(id)
 );
 
 CREATE TABLE IF NOT EXISTS hours (
-  hours_id int AUTO_INCREMENT PRIMARY KEY,
-  user_id int NOT NULL,
-  date date NOT NULL,
-  hours decimal(5,2) NOT NULL,
-  created_at timestamp NOT NULL DEFAULT current_timestamp()
+  hours_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  date DATE NOT NULL,
+  hours DECIMAL(5,2) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
 
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  CONSTRAINT fk_hours_user
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS absences (
-  absences_id int AUTO_INCREMENT PRIMARY KEY,
-  user_id int NOT NULL,
-  date date NOT NULL,
-  reason text,
-  approved_by int,
-  created_at datetime DEFAULT current_timestamp(),
-  updated_at datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  absences_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  date DATE NOT NULL,
+  reason TEXT,
+  status ENUM('Pending', 'Approved', 'Rejected')
+    DEFAULT 'Pending' NOT NULL,
+  approved_by INT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP()
+    ON UPDATE CURRENT_TIMESTAMP(),
 
-  FOREIGN KEY (user_id) REFERENCES users (user_id),
-  FOREIGn KEY (approved_by) REFERENCES users (user_id)
-)
+  CONSTRAINT fk_absence_user
+    FOREIGN KEY (user_id) REFERENCES users(id),
+
+  CONSTRAINT fk_absence_approved_by
+    FOREIGN KEY (approved_by) REFERENCES users(id)
+);
 
 CREATE TABLE IF NOT EXISTS accomplishment (
-  accomplishment_id int AUTO_INCREMENT PRIMARY KEY,
-  user_id int NOT NULL,
-  date_from date NOT NULL,
-  date_to date NOT NULL,
-  accomplishment text,
-  created_at datetime DEFAULT current_timestamp(),
-  updated_at datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  accomplishment_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  date_from DATE NOT NULL,
+  date_to DATE NOT NULL,
+  accomplishment TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP()
+    ON UPDATE CURRENT_TIMESTAMP(),
+
+  CONSTRAINT fk_accomplishment_user
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

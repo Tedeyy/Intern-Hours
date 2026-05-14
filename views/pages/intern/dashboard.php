@@ -1,0 +1,156 @@
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../../feed.php?page=login");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$user_name = $_SESSION['user_name'];
+$current_month = (int)($_GET['month'] ?? date('m'));
+$current_year = (int)($_GET['year'] ?? date('Y'));
+
+$base_url = "../../../";
+require_once '../../components/header.php';
+?>
+
+    <link rel="stylesheet" href="../../../assets/css/dashboard.css">
+</head>
+<body>
+    <?php require_once '../../components/navbar.php'; ?>
+    <div class="dashboard-container">
+        <div class="calendar-section">
+
+            <div class="calendar-header">
+                <h2 id="calendar-title">December 2024</h2>
+                <div class="calendar-nav">
+                    <button onclick="previousMonth()">← Prev</button>
+                    <button onclick="nextMonth()">Next →</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendar-grid"></div>
+
+            <div style="text-align: center; color: #666; font-size: 12px;">
+                <p>Click a day to log or edit hours</p>
+            </div>
+        </div>
+
+        <div class="stats-sidebar">
+            <div class="stat-card">
+                <div class="stat-label">Total Hours</div>
+                <div class="stat-value">
+                    <span id="total-hours">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Month Total</div>
+                <div class="stat-value">
+                    <span id="month-total">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Today's Hours</div>
+                <div class="stat-value">
+                    <span id="today-hours">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Average/Day</div>
+                <div class="stat-value">
+                    <span id="average-hours">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label" id="filtered-label">Filtered Total</div>
+                <div class="stat-value">
+                    <span id="filtered-total">0</span>
+                    <span class="stat-unit">hrs</span>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="stat-label">Filter by Date</div>
+                <div class="filter-group">
+                    <label>From Date</label>
+                    <input type="date" id="filter-from-date">
+                </div>
+                <div class="filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="filter-to-date">
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn-filter" onclick="applyFilter()">Apply</button>
+                    <button class="btn-reset" onclick="resetFilter()">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Hours Modal -->
+    <div class="modal" id="log-modal">
+        <div class="modal-content">
+            <div class="modal-header">Log Hours</div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="text" id="modal-date" readonly style="background: #f5f5f5;">
+            </div>
+            <div class="form-group">
+                <label>Hours Worked</label>
+                <input type="number" id="modal-hours" min="0" max="24" step="0.5" placeholder="Enter hours">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="saveHours()">Save</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-delete" id="delete-btn" style="display: none;" onclick="deleteHours()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Absence Modal -->
+    <div class="modal" id="absence-modal">
+        <div class="modal-content">
+            <div class="modal-header">Absence Request</div>
+            <div id="absence-status-display" style="margin-bottom: 15px; padding: 8px; border-radius: 4px; font-weight: 600; text-align: center; display: none;"></div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="text" id="absence-modal-date" readonly style="background: #f5f5f5;">
+            </div>
+            <div class="form-group">
+                <label>Reason for Absence</label>
+                <textarea id="absence-modal-reason" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; font-size: 14px; box-sizing: border-box;" placeholder="Explain why you will be absent..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-save" id="absence-submit-btn" onclick="saveAbsence()">Submit Request</button>
+                <button class="btn-delete" id="absence-delete-btn" style="display: none;" onclick="deleteAbsence()">Cancel Request</button>
+                <button class="btn-cancel" onclick="closeAbsenceModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMonth = parseInt('<?php echo $current_month; ?>');
+        let currentYear = parseInt('<?php echo $current_year; ?>');
+        let userId = parseInt('<?php echo $user_id; ?>');
+        let selectedDate = null;
+        let hoursData = {};
+        let absencesData = {};
+        let monthHoursData = {};
+        let allHoursData = {};
+        let filterFromDate = null;
+        let filterToDate = null;
+    </script>
+    <script src="../../../assets/js/dashboard.js"></script>
+    <?php require_once '../../components/footer.php'; ?>
+</body>
+</html>

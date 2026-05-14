@@ -1,0 +1,379 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  padding: 20px;
+}
+
+.calendar-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #1a1a1a;
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.calendar-nav button {
+  padding: 8px 12px;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.calendar-nav button:hover {
+  background: #4a4a4a;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.day-cell:hover {
+  border-color: #1a1a1a;
+  background: #f9f9f9;
+}
+
+.day-cell.other-month {
+  background: #f5f5f5;
+  color: #ccc;
+}
+
+.day-cell.today {
+  border: 2px solid #1a1a1a;
+  background: #f0f0f0;
+}
+
+.day-cell.logged {
+  background: #e8f5e9;
+  border-color: #4caf50;
+}
+
+.day-cell.disabled {
+  background: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.day-cell.disabled:hover {
+  border-color: #ddd;
+  background: #f5f5f5;
+}
+
+.day-cell-date {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #1a1a1a;
+}
+
+.day-cell-hours {
+  font-size: 12px;
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.absence-badge {
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.absence-badge.pending {
+  background: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ffe0b2;
+}
+
+.absence-badge.approved {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.absence-badge.rejected {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.stats-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.stat-unit {
+  font-size: 12px;
+  color: #999;
+  margin-left: 4px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-save {
+  background: #1a1a1a;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #4a4a4a;
+}
+
+.btn-cancel {
+  background: #ddd;
+  color: #1a1a1a;
+}
+
+.btn-cancel:hover {
+  background: #ccc;
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #d32f2f;
+}
+
+.filter-section {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+
+.filter-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.filter-group input:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn-filter {
+  background: #1a1a1a;
+  color: white;
+}
+
+.btn-filter:hover {
+  background: #4a4a4a;
+}
+
+.btn-reset {
+  background: #ddd;
+  color: #1a1a1a;
+}
+
+.btn-reset:hover {
+  background: #ccc;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group input {
+    width: 100%;
+  }
+
+  .filter-buttons {
+    width: 100%;
+  }
+
+  .filter-buttons button {
+    flex: 1;
+  }
+
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .day-cell {
+    font-size: 12px;
+  }
+}
