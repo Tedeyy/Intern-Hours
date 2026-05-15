@@ -5,6 +5,7 @@
         </div>
         <div class="flex items-center space-x-4">
             <?php if (isset($_SESSION['user_id'])): ?>
+                <a href="<?php echo $base_url ?? ''; ?>views/feed.php" class="text-gray-600 hover:text-gray-900 font-medium">Dashboard</a>
                 <a href="<?php echo $base_url ?? ''; ?>views/feed.php?page=profile" class="text-gray-600 hover:text-gray-900 font-medium">Profile</a>
                 <a href="<?php echo $base_url ?? ''; ?>api/logout.php" class="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition font-semibold">Logout</a>
             <?php endif; ?>

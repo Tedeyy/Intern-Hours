@@ -34,9 +34,10 @@ function loadInterns() {
         list.innerHTML = "";
         data.interns.forEach((intern) => {
           // Skip self
-          if (intern.id === userId) return;
+          if (parseInt(intern.id) === userId) return;
 
-          div.className = "flex flex-col items-center gap-2 bg-white p-3 rounded-lg border border-gray-50 shadow-sm";
+          const div = document.createElement("div");
+          div.className = "flex flex-col items-center gap-2 bg-white p-3 rounded-lg border border-gray-100 shadow-sm";
           const hoursBadge = intern.total_hours !== null 
             ? `<div class="mt-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full">${parseFloat(intern.total_hours).toFixed(1)}h</div>` 
             : '';

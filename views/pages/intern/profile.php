@@ -29,108 +29,157 @@ $organization_name = $_SESSION['organization_name'] ?? 'Not Assigned';
 $base_url = "../";
 ?>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <!-- Profile Header -->
-        <div class="bg-gray-900 px-8 py-12 text-center relative">
-            <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full mb-4 text-gray-900 text-3xl font-bold">
-                <?php echo strtoupper(substr($user_name, 0, 1)); ?>
+<div class="max-w-6xl mx-auto px-4 py-10">
+    <div class="flex flex-col lg:flex-row gap-8">
+        
+        <!-- Left Sidebar: Identity & Navigation -->
+        <div class="lg:w-1/3 space-y-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 text-center lg:text-left">
+                <div class="inline-flex lg:flex items-center justify-center w-20 h-20 bg-gray-900 rounded-2xl mb-6 text-white text-3xl font-bold shadow-lg">
+                    <?php echo strtoupper(substr($user_name, 0, 1)); ?>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight"><?php echo htmlspecialchars($user_name); ?></h1>
+                <p class="text-blue-600 font-semibold text-sm mt-1 uppercase tracking-widest"><?php echo htmlspecialchars($user_role); ?></p>
+                
+                <div class="mt-8 space-y-3">
+                    <a href="feed.php" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl transition font-medium group">
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Back to Dashboard
+                    </a>
+                    <a href="../api/logout.php" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition font-medium group">
+                        <svg class="w-5 h-5 text-red-300 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Sign Out
+                    </a>
+                </div>
             </div>
-            <h1 class="text-3xl font-bold text-white"><?php echo htmlspecialchars($user_name); ?></h1>
-            <p class="text-gray-400 mt-2"><?php echo htmlspecialchars($user_role); ?></p>
-            
-            <!-- Total Hours Badge -->
-            <div class="mt-6 inline-block bg-blue-600 px-6 py-2 rounded-full text-white font-bold">
-                Total Logged: <?php echo number_format($total_hours, 1); ?> hrs
+
+            <!-- Stats Card -->
+            <div class="bg-gray-900 rounded-3xl p-8 text-white shadow-xl overflow-hidden relative">
+                <div class="relative z-10">
+                    <p class="text-gray-400 text-sm font-medium uppercase tracking-wider">Accumulated Progress</p>
+                    <h2 class="text-5xl font-bold mt-2"><?php echo number_format($total_hours, 1); ?></h2>
+                    <p class="text-gray-400 text-sm mt-1">Total Internship Hours</p>
+                </div>
+                <svg class="absolute -right-4 -bottom-4 w-32 h-32 text-white/5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
         </div>
 
-        <!-- Profile Details -->
-        <div class="p-8">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-sm font-medium text-gray-500 uppercase tracking-wider">Email Address</label>
-                        <p class="text-lg font-semibold text-gray-900 mt-1"><?php echo htmlspecialchars($user_email); ?></p>
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-gray-500 uppercase tracking-wider">Role</label>
-                        <p class="text-lg font-semibold text-gray-900 mt-1"><?php echo htmlspecialchars($user_role); ?></p>
-                    </div>
+        <!-- Right Content: Detailed Info & Settings -->
+        <div class="lg:w-2/3 space-y-8">
+            
+            <!-- Information Grid -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-gray-900">Professional Information</h2>
+                    <span id="save-status" class="text-xs font-bold text-green-600 px-3 py-1 bg-green-50 rounded-full opacity-0 transition-opacity">SAVED</span>
                 </div>
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-sm font-medium text-gray-500 uppercase tracking-wider">Office</label>
-                        <p class="text-lg font-semibold text-gray-900 mt-1"><?php echo htmlspecialchars($office_name); ?></p>
+                <div class="p-8 grid md:grid-cols-2 gap-x-12 gap-y-10">
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Email Identity</label>
+                        <p class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($user_email); ?></p>
                     </div>
-                    <div>
-                        <label class="text-sm font-medium text-gray-500 uppercase tracking-wider">Organization</label>
-                        <p class="text-lg font-semibold text-gray-900 mt-1"><?php echo htmlspecialchars($organization_name); ?></p>
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Assigned Organization</label>
+                        <p class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($organization_name); ?></p>
                     </div>
-                </div>
-            </div>
-
-            <!-- Privacy Setting Section -->
-            <div class="mt-12 p-6 bg-gray-50 rounded-xl border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900">Privacy Settings</h3>
-                        <p class="text-gray-600 text-sm">Allow colleagues in your organization to see your total hours.</p>
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Office / Department</label>
+                        <p class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($office_name); ?></p>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="privacy-toggle" class="sr-only peer" <?php echo $is_public ? 'checked' : ''; ?>>
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Privacy Controls</label>
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-sm text-gray-600">Public visibility</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="privacy-toggle" class="sr-only peer" <?php echo $is_public ? 'checked' : ''; ?>>
+                                <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-8 pt-8 border-t border-gray-100 flex justify-between items-center">
-                <a href="feed.php" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition">
-                    Back to Dashboard
-                </a>
-                <span id="save-status" class="text-sm font-medium text-green-600 opacity-0 transition-opacity duration-300">Saved successfully!</span>
+            <!-- Colleagues Section -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-xl font-bold text-gray-900">Your Network</h2>
+                    <p class="text-sm text-gray-500 font-medium">Colleagues in your organization</p>
+                </div>
+                <div id="interns-list" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="animate-pulse bg-gray-50 h-24 rounded-2xl"></div>
+                    <div class="animate-pulse bg-gray-50 h-24 rounded-2xl"></div>
+                    <div class="animate-pulse bg-gray-50 h-24 rounded-2xl"></div>
+                </div>
+            </div>
+
+            <!-- Security Note -->
+            <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100/50 flex items-center gap-4">
+                <div class="p-3 bg-white rounded-xl shadow-sm">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <p class="text-sm text-blue-800 font-medium leading-relaxed">
+                    Account security is important. Your profile data is encrypted and only shared with verified supervisors within your organization.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+function loadColleagues() {
+    const list = document.getElementById("interns-list");
+    const currentUserId = <?php echo $user_id; ?>;
+
+    fetch('../api/interns.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.interns.length <= 1) {
+                    list.innerHTML = '<p class="text-gray-400 text-sm col-span-full py-4 text-center italic">No other colleagues found in your network.</p>';
+                    return;
+                }
+
+                list.innerHTML = "";
+                data.interns.forEach(intern => {
+                    if (parseInt(intern.id) === currentUserId) return;
+
+                    const div = document.createElement("div");
+                    div.className = "flex items-center gap-4 bg-gray-50/50 p-4 rounded-2xl border border-gray-100 hover:border-blue-200 transition-all hover:bg-white hover:shadow-sm group";
+                    
+                    const hoursBadge = intern.total_hours !== null 
+                        ? `<span class="text-[10px] font-bold text-blue-600 px-2 py-0.5 bg-blue-50 rounded-full">${parseFloat(intern.total_hours).toFixed(1)}h</span>` 
+                        : '';
+                        
+                    div.innerHTML = `
+                        <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 font-bold text-sm border border-gray-50 group-hover:bg-gray-900 group-hover:text-white transition-colors">
+                            ${intern.name.charAt(0)}
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-sm font-bold text-gray-900 truncate">${intern.name.split(" ")[0]}</span>
+                            ${hoursBadge}
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+        });
+}
+
+loadColleagues();
+
 document.getElementById('privacy-toggle').addEventListener('change', function() {
     const isPublic = this.checked ? 1 : 0;
     const formData = new FormData();
     formData.append('is_public', isPublic);
 
-    fetch('../api/profile_update.php', {
-        method: 'POST',
-        body: formData
-    })
+    fetch('../api/profile_update.php', { method: 'POST', body: formData })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             const status = document.getElementById('save-status');
             status.style.opacity = '1';
             setTimeout(() => { status.style.opacity = '0'; }, 2000);
-        } else {
-            alert('Error updating privacy: ' + data.error);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Network error updating privacy settings.');
     });
 });
 </script>
-
-    <!-- Security Info -->
-    <div class="mt-8 bg-blue-50 border border-blue-100 rounded-xl p-6 flex items-start space-x-4">
-        <div class="text-blue-500">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-        <div>
-            <h4 class="text-blue-900 font-bold">Privacy Note</h4>
-            <p class="text-blue-800 text-sm mt-1">Your profile information is only visible to you and your assigned supervisors. Keep your credentials secure.</p>
-        </div>
-    </div>
-</div>
