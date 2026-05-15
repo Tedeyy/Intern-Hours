@@ -1,6 +1,43 @@
 // Global variables will be initialized in the PHP file
 // currentMonth, currentYear, selectedDate, hoursData, monthHoursData, allHoursData, userId, filterFromDate, filterToDate
 
+const fixedHolidays = {
+  "01-01": "New Year's Day",
+  "02-25": "EDSA Revolution",
+  "04-09": "Araw ng Kagitingan",
+  "05-01": "Labor Day",
+  "06-12": "Independence Day",
+  "08-21": "Ninoy Aquino Day",
+  "11-01": "All Saints' Day",
+  "11-02": "All Souls' Day",
+  "11-30": "Bonifacio Day",
+  "12-08": "Immaculate Conception",
+  "12-25": "Christmas Day",
+  "12-30": "Rizal Day",
+  "12-31": "New Year's Eve",
+};
+
+const movableHolidays = {
+  // 2024
+  "2024-02-10": "Chinese New Year",
+  "2024-03-28": "Maundy Thursday",
+  "2024-03-29": "Good Friday",
+  "2024-03-30": "Black Saturday",
+  "2024-08-26": "National Heroes Day",
+  // 2025
+  "2025-01-29": "Chinese New Year",
+  "2025-04-17": "Maundy Thursday",
+  "2025-04-18": "Good Friday",
+  "2025-04-19": "Black Saturday",
+  "2025-08-25": "National Heroes Day",
+  // 2026
+  "2026-02-17": "Chinese New Year",
+  "2026-04-02": "Maundy Thursday",
+  "2026-04-03": "Good Friday",
+  "2026-04-04": "Black Saturday",
+  "2026-08-31": "National Heroes Day",
+};
+
 // Initialize calendar
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("filter-from-date")) {
@@ -161,10 +198,19 @@ function renderCalendar() {
       cell.classList.add("disabled");
     }
 
+    const monthDay = String(currentMonth).padStart(2, "0") + "-" + dateStr;
+    const holiday = movableHolidays[fullDate] || fixedHolidays[monthDay];
+
+    if (holiday) {
+      console.log(`Holiday found: ${fullDate} (${monthDay}) - ${holiday}`);
+      cell.classList.add("holiday");
+    }
+
     cell.innerHTML = `
             <div class="day-cell-date">${day}</div>
             ${hoursData[fullDate] ? `<div class="day-cell-hours">${hoursData[fullDate]}h</div>` : ""}
             ${absencesData[fullDate] ? `<div class="absence-badge ${absencesData[fullDate].status.toLowerCase()}">${absencesData[fullDate].status}</div>` : ""}
+            ${holiday ? `<div class="holiday-badge" title="${holiday}">${holiday}</div>` : ""}
         `;
 
     if (!isFuture) {
