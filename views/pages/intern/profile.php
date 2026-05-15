@@ -52,21 +52,35 @@ $base_url = "../";
                     </a>
                 </div>
             </div>
-
-            <!-- Stats Card -->
-            <div class="bg-gray-900 rounded-3xl p-8 text-white shadow-xl overflow-hidden relative">
-                <div class="relative z-10">
-                    <p class="text-gray-400 text-sm font-medium uppercase tracking-wider">Accumulated Progress</p>
-                    <h2 class="text-5xl font-bold mt-2"><?php echo number_format($total_hours, 1); ?></h2>
-                    <p class="text-gray-400 text-sm mt-1">Total Internship Hours</p>
-                </div>
-                <svg class="absolute -right-4 -bottom-4 w-32 h-32 text-white/5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
         </div>
 
         <!-- Right Content: Detailed Info & Settings -->
         <div class="lg:w-2/3 space-y-8">
             
+            <!-- Stats Card (Focal Point) -->
+            <div class="bg-gray-900 rounded-3xl p-10 text-white shadow-xl overflow-hidden relative flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div class="relative z-10">
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-[0.2em]">Total Accumulated Progress</p>
+                    <div class="flex items-baseline gap-3 mt-4">
+                        <h2 class="text-7xl font-black tracking-tighter text-white"><?php echo number_format($total_hours, 1); ?></h2>
+                        <span class="text-2xl font-bold text-blue-500 uppercase">Hours</span>
+                    </div>
+                    <div class="mt-6 flex items-center gap-2 text-gray-400 text-sm font-medium">
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        Verified and up to date
+                    </div>
+                </div>
+                <div class="relative z-10 bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 text-right">
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Current Role</p>
+                    <p class="text-lg font-bold"><?php echo htmlspecialchars($user_role); ?></p>
+                    <div class="mt-4 pt-4 border-t border-white/10">
+                        <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Status</p>
+                        <p class="text-green-400 font-bold">Active</p>
+                    </div>
+                </div>
+                <svg class="absolute -right-10 -bottom-10 w-64 h-64 text-white/5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+
             <!-- Information Grid -->
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center">
