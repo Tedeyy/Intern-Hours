@@ -15,6 +15,8 @@ const fixedHolidays = {
   "12-25": "Christmas Day",
   "12-30": "Rizal Day",
   "12-31": "New Year's Eve",
+
+  "02-21": "Lawrenze Bheras Day",
 };
 
 const movableHolidays = {
