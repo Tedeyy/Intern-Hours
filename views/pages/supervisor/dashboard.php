@@ -70,7 +70,7 @@ require_once '../../components/header.php';
                                 </div>
                                 <div class="mt-4 flex justify-between items-center">
                                     <span class="text-xs text-gray-500">Intern</span>
-                                    <a href="tracker.php?id=${intern.id}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">View Logs →</a>
+                                    <a href="intern-logs.php?id=${intern.id}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">View Logs →</a>
                                 </div>
                             `;
                             list.appendChild(card);
