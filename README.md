@@ -2,6 +2,11 @@
 
 A modern, efficient web application designed to track and manage intern working hours, absence requests, and performance logs.
 
+## Contirbutors
+**Irven Abarquez**
+**Teddy Bermudo**
+**Lawrence Heras**
+
 ## 🚀 Tech Stack
 
 - **Backend**: PHP 8.x
