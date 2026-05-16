@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$user_role = $_SESSION['user_role'] ?? 'Intern';
 $office_id = $_SESSION['office_id'];
 $organization_id = $_SESSION['organization_id'];
 

@@ -17,6 +17,7 @@ require_once '../../components/header.php';
 ?>
 
     <link rel="stylesheet" href="../../../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../../../assets/css/colleagues.css">
 </head>
 <body>
     <?php require_once '../../components/navbar.php'; ?>
@@ -102,10 +103,46 @@ require_once '../../components/header.php';
 
         <!-- Sections below calendar and sidebar -->
         <div class="colleagues-section full-width mt-6" style="background: white; padding: 20px; border-radius: 12px; shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px;">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Your Colleagues</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 class="text-xl font-bold text-gray-800">Your Colleagues</h3>
+                <a href="colleagues.php" style="font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none;">View All →</a>
+            </div>
             <div id="interns-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <p class="text-gray-500 italic text-sm">Loading colleagues...</p>
             </div>
+        </div>
+    </div>
+
+    <!-- Intern Hours Detail Modal (shared with colleagues page) -->
+    <div class="intern-hours-modal" id="intern-hours-modal">
+        <div class="intern-hours-modal-content">
+            <div class="intern-modal-header">
+                <div class="intern-info">
+                    <div class="modal-avatar" id="intern-modal-avatar"></div>
+                    <div>
+                        <h3 id="intern-modal-name">Loading...</h3>
+                        <div class="modal-subtitle" id="intern-modal-subtitle"></div>
+                    </div>
+                </div>
+                <button class="intern-modal-close" onclick="closeInternModal()">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="intern-modal-stats">
+                <div class="intern-modal-stat">
+                    <div class="value" id="intern-stat-total">—</div>
+                    <div class="label">Total Hours</div>
+                </div>
+                <div class="intern-modal-stat">
+                    <div class="value" id="intern-stat-days">—</div>
+                    <div class="label">Days Logged</div>
+                </div>
+                <div class="intern-modal-stat">
+                    <div class="value" id="intern-stat-avg">—</div>
+                    <div class="label">Avg/Day</div>
+                </div>
+            </div>
+            <div id="intern-modal-body"></div>
         </div>
     </div>
 
@@ -161,8 +198,11 @@ require_once '../../components/header.php';
         let allHoursData = {};
         let filterFromDate = null;
         let filterToDate = null;
+        const currentUserId = userId;
+        const apiBasePath = '../../../';
     </script>
     <script src="../../../assets/js/dashboard.js"></script>
+    <script src="../../../assets/js/colleagues.js"></script>
     <?php require_once '../../components/footer.php'; ?>
 </body>
 </html>
