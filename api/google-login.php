@@ -3,9 +3,9 @@ require_once __DIR__ . '/../config.php';
 
 session_start();
 
-$google_client_id = getenv('GOOGLE_CLIENT_ID');
-$google_client_secret = getenv('GOOGLE_CLIENT_SECRET');
-$google_redirect_uri = getenv('GOOGLE_REDIRECT_URI') ?: 'http://localhost/Intern-Hours/auth/google-callback.php';
+$google_client_id = get_config('GOOGLE_CLIENT_ID');
+$google_client_secret = get_config('GOOGLE_CLIENT_SECRET');
+$google_redirect_uri = get_config('GOOGLE_REDIRECT_URI', 'http://localhost/Intern-Hours/api/google-callback.php');
 
 if (empty($google_client_id) || empty($google_client_secret)) {
     die('Google OAuth credentials not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env file.');

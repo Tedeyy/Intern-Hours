@@ -21,9 +21,9 @@ if (empty($code)) {
     exit;
 }
 
-$google_client_id = getenv('GOOGLE_CLIENT_ID');
-$google_client_secret = getenv('GOOGLE_CLIENT_SECRET');
-$google_redirect_uri = getenv('GOOGLE_REDIRECT_URI') ?: 'http://localhost/Intern-Hours/api/google-callback.php';
+$google_client_id = get_config('GOOGLE_CLIENT_ID');
+$google_client_secret = get_config('GOOGLE_CLIENT_SECRET');
+$google_redirect_uri = get_config('GOOGLE_REDIRECT_URI', 'http://localhost/Intern-Hours/api/google-callback.php');
 
 // Exchange authorization code for access token
 $token_url = 'https://oauth2.googleapis.com/token';
@@ -87,11 +87,8 @@ if ($user) {
     $stmt->execute([$token_data['access_token'], $token_data['refresh_token'] ?? '', $user['id']]);
     
     // Redirect based on role
-    if ($user['role'] === 'Admin') {
-        header("Location: ../views/pages/supervisor/dashboard.php");
-    } else {
-        header("Location: ../views/pages/intern/dashboard.php");
-    }
+    // Redirect to routed dashboard
+    header("Location: ../views/feed.php?page=dashboard");
     exit;
 } else {
     // Check if user exists by email (account linking)
@@ -109,11 +106,7 @@ if ($user) {
         $_SESSION['user_email'] = $existing_user['email'];
         $_SESSION['user_role'] = $existing_user['role'];
         
-        if ($existing_user['role'] === 'Admin') {
-            header("Location: ../views/pages/supervisor/dashboard.php");
-        } else {
-            header("Location: ../views/pages/intern/dashboard.php");
-        }
+        header("Location: ../views/feed.php?page=dashboard");
         exit;
     } else {
         // Create new user with Google account
@@ -127,7 +120,7 @@ if ($user) {
         $_SESSION['user_email'] = $email;
         $_SESSION['user_role'] = 'Intern';
         
-        header("Location: ../views/pages/intern/dashboard.php");
+        header("Location: ../views/feed.php?page=dashboard");
         exit;
     }
 }
