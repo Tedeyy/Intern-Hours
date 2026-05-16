@@ -10,3 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $base_url ?? ''; ?>assets/css/global.css">
+    <link rel="stylesheet" href="<?php echo $base_url ?? ''; ?>assets/css/theme.css">
+    
+    <script>
+        // Configure Tailwind for class-based dark mode
+        window.tailwind && (tailwind.config = { darkMode: 'class' });
+    </script>
+    <script src="<?php echo $base_url ?? ''; ?>assets/js/theme.js"></script>

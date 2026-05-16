@@ -1,0 +1,104 @@
+/**
+ * Global Dark Mode Overrides
+ */
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --border-color: #e5e7eb;
+}
+
+.dark-mode {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+    
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Backgrounds */
+.dark-mode .bg-white { background-color: var(--bg-secondary) !important; }
+.dark-mode .bg-gray-50 { background-color: var(--bg-primary) !important; }
+.dark-mode .bg-gray-100 { background-color: var(--border-color) !important; }
+
+/* Text Colors */
+.dark-mode .text-gray-900 { color: var(--text-primary) !important; }
+.dark-mode .text-gray-800 { color: #f3f4f6 !important; }
+.dark-mode .text-gray-700 { color: #e5e7eb !important; }
+.dark-mode .text-gray-600 { color: var(--text-secondary) !important; }
+.dark-mode .text-gray-500 { color: #6b7280 !important; }
+
+/* Borders */
+.dark-mode .border { border-color: var(--border-color) !important; }
+.dark-mode .border-gray-100 { border-color: var(--border-color) !important; }
+.dark-mode .border-gray-200 { border-color: #4b5563 !important; }
+
+/* Navigation */
+.dark-mode nav {
+    background-color: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Calendar Overrides (Specific to existing design) */
+.dark-mode .calendar-section {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+.dark-mode .day-cell {
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+}
+.dark-mode .day-cell:hover {
+    background-color: #374151;
+}
+.dark-mode .day-cell.other-month {
+    background-color: #111827;
+    color: #4b5563;
+}
+.dark-mode .day-cell.today {
+    background-color: #1e3a8a;
+    border-color: #3b82f6;
+}
+
+/* Cards & Modals */
+.dark-mode .stat-card,
+.dark-mode .welcome-card,
+.dark-mode .modal-content,
+.dark-mode .colleague-card,
+.dark-mode .intern-hours-modal-content {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Inputs */
+.dark-mode input, 
+.dark-mode select, 
+.dark-mode textarea {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+    color: #ffffff !important;
+}
+.dark-mode input[readonly] {
+    background-color: #1f2937 !important;
+}
+
+/* Scrollbar (Modern browsers) */
+.dark-mode ::-webkit-scrollbar {
+    width: 10px;
+}
+.dark-mode ::-webkit-scrollbar-track {
+    background: #111827;
+}
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 5px;
+}
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}

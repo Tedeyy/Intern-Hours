@@ -18,7 +18,7 @@
                         <a href="<?php echo $base_url ?? ''; ?>views/pages/supervisor/reports.php" class="text-gray-600 hover:text-gray-900 font-medium transition">Reports</a>
                     <?php endif; ?>
                     
-                    <a href="<?php echo $base_url ?? ''; ?>views/pages/profile.php" class="text-gray-600 hover:text-gray-900 font-medium transition">Profile</a>
+                    <a href="<?php echo $base_url ?? ''; ?>views/feed.php?page=profile" class="text-gray-600 hover:text-gray-900 font-medium transition">Profile</a>
                 </div>
             <?php endif; ?>
         </div>
