@@ -25,8 +25,8 @@ const monthNames = [
     'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-// ===== Load Interns =====
-function loadInterns() {
+// ===== Load Colleagues List =====
+function loadColleaguesList() {
     const container = document.getElementById('colleagues-container');
     container.innerHTML = `
         <div class="colleagues-loading">
@@ -40,7 +40,7 @@ function loadInterns() {
         .then(data => {
             if (data.success) {
                 allInterns = data.interns.filter(i => parseInt(i.id) !== currentUserId);
-                updateStats();
+                updateColleaguesStats();
                 renderInterns();
             } else {
                 container.innerHTML = `<div class="colleagues-empty"><p>Could not load colleagues.</p></div>`;
@@ -52,8 +52,8 @@ function loadInterns() {
         });
 }
 
-// ===== Update Stats =====
-function updateStats() {
+// ===== Update Colleagues Stats =====
+function updateColleaguesStats() {
     const totalEl = document.getElementById('stat-total-colleagues');
     const publicEl = document.getElementById('stat-public-count');
     const hoursEl = document.getElementById('stat-total-team-hours');
@@ -379,6 +379,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Only auto-load on the dedicated colleagues page (not dashboard)
     if (document.getElementById('colleagues-container')) {
-        loadInterns();
+        loadColleaguesList();
     }
 });
