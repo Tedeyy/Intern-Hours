@@ -8,6 +8,10 @@
                 <div class="hidden md:flex items-center gap-6">
                     <a href="<?php echo $base_url ?? ''; ?>views/pages/<?php echo $_SESSION['user_role'] === 'Admin' ? 'supervisor/dashboard.php' : 'intern/dashboard.php'; ?>" class="text-gray-600 hover:text-gray-900 font-medium transition">Dashboard</a>
                     
+                    <?php if ($_SESSION['user_role'] !== 'Admin'): ?>
+                        <a href="<?php echo $base_url ?? ''; ?>views/pages/intern/colleagues.php" class="text-gray-600 hover:text-gray-900 font-medium transition">Colleagues</a>
+                    <?php endif; ?>
+
                     <?php if ($_SESSION['user_role'] === 'Admin'): ?>
                         <a href="<?php echo $base_url ?? ''; ?>views/pages/supervisor/all-hours.php" class="text-gray-600 hover:text-gray-900 font-medium transition">All Hours</a>
                         <a href="<?php echo $base_url ?? ''; ?>views/pages/supervisor/user-management.php" class="text-gray-600 hover:text-gray-900 font-medium transition">Users</a>

@@ -27,6 +27,9 @@ $organization_name = $_SESSION['organization_name'] ?? 'Not Assigned';
 
 // Base URL for assets
 $base_url = "../";
+
+// Include colleagues CSS path for the modal
+$colleagues_css = "../../assets/css/colleagues.css";
 ?>
 
 <div class="max-w-6xl mx-auto px-4 py-10">
@@ -139,6 +142,40 @@ $base_url = "../";
     </div>
 </div>
 
+<!-- Intern Hours Detail Modal -->
+<link rel="stylesheet" href="<?php echo $colleagues_css; ?>">
+<div class="intern-hours-modal" id="intern-hours-modal">
+    <div class="intern-hours-modal-content">
+        <div class="intern-modal-header">
+            <div class="intern-info">
+                <div class="modal-avatar" id="intern-modal-avatar"></div>
+                <div>
+                    <h3 id="intern-modal-name">Loading...</h3>
+                    <div class="modal-subtitle" id="intern-modal-subtitle"></div>
+                </div>
+            </div>
+            <button class="intern-modal-close" onclick="closeInternModal()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="intern-modal-stats">
+            <div class="intern-modal-stat">
+                <div class="value" id="intern-stat-total">—</div>
+                <div class="label">Total Hours</div>
+            </div>
+            <div class="intern-modal-stat">
+                <div class="value" id="intern-stat-days">—</div>
+                <div class="label">Days Logged</div>
+            </div>
+            <div class="intern-modal-stat">
+                <div class="value" id="intern-stat-avg">—</div>
+                <div class="label">Avg/Day</div>
+            </div>
+        </div>
+        <div id="intern-modal-body"></div>
+    </div>
+</div>
+
 <script>
 function loadColleagues() {
     const list = document.getElementById("interns-list");
@@ -158,11 +195,17 @@ function loadColleagues() {
                     if (parseInt(intern.id) === currentUserId) return;
 
                     const div = document.createElement("div");
-                    div.className = "flex items-center gap-4 bg-gray-50/50 p-4 rounded-2xl border border-gray-100 hover:border-blue-200 transition-all hover:bg-white hover:shadow-sm group";
+                    div.className = "flex items-center gap-4 bg-gray-50/50 p-4 rounded-2xl border border-gray-100 hover:border-blue-200 transition-all hover:bg-white hover:shadow-sm group cursor-pointer";
+                    div.title = "Click to view " + intern.name.split(" ")[0] + "'s hours";
+                    div.onclick = () => {
+                        if (typeof openInternModal === 'function') {
+                            openInternModal(parseInt(intern.id));
+                        }
+                    };
                     
                     const hoursBadge = intern.total_hours !== null 
                         ? `<span class="text-[10px] font-bold text-blue-600 px-2 py-0.5 bg-blue-50 rounded-full">${parseFloat(intern.total_hours).toFixed(1)}h</span>` 
-                        : '';
+                        : `<span class="text-[10px] font-bold text-gray-400 px-2 py-0.5 bg-gray-100 rounded-full">Private</span>`;
                         
                     div.innerHTML = `
                         <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 font-bold text-sm border border-gray-50 group-hover:bg-gray-900 group-hover:text-white transition-colors">
@@ -181,6 +224,9 @@ function loadColleagues() {
 
 loadColleagues();
 
+const currentUserId = <?php echo $user_id; ?>;
+const apiBasePath = '../';
+
 document.getElementById('privacy-toggle').addEventListener('change', function() {
     const isPublic = this.checked ? 1 : 0;
     const formData = new FormData();
@@ -197,3 +243,4 @@ document.getElementById('privacy-toggle').addEventListener('change', function() 
     });
 });
 </script>
+<script src="../../assets/js/colleagues.js"></script>

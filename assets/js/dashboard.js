@@ -76,10 +76,16 @@ function loadInterns() {
           if (parseInt(intern.id) === userId) return;
 
           const div = document.createElement("div");
-          div.className = "flex flex-col items-center gap-2 bg-white p-3 rounded-lg border border-gray-100 shadow-sm";
+          div.className = "flex flex-col items-center gap-2 bg-white p-3 rounded-lg border border-gray-100 shadow-sm cursor-pointer hover:border-blue-200 hover:shadow-md transition-all";
+          div.title = "Click to view " + intern.name.split(" ")[0] + "'s hours";
+          div.onclick = () => {
+            if (typeof openInternModal === 'function') {
+              openInternModal(parseInt(intern.id));
+            }
+          };
           const hoursBadge = intern.total_hours !== null 
             ? `<div class="mt-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full">${parseFloat(intern.total_hours).toFixed(1)}h</div>` 
-            : '';
+            : `<div class="mt-1 px-2 py-0.5 bg-gray-100 text-gray-400 text-[10px] font-bold rounded-full">Private</div>`;
             
           div.innerHTML = `
                         <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 font-bold text-lg" title="${intern.email}">
