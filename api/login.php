@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 unset($_SESSION['login_blocked_until']);
 
                 // Return success response with redirect URL
-                $redirectUrl = $user['role'] === 'Admin' ? '../views/pages/supervisor/dashboard.php' : '../views/pages/intern/dashboard.php';
+                $redirectUrl = '../views/feed.php?page=dashboard';
                 echo json_encode(['success' => true, 'redirect' => $redirectUrl]);
                 exit;
             }

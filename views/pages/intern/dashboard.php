@@ -1,9 +1,7 @@
 <?php
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../../feed.php?page=login");
+// Ensure this is included through feed.php
+if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
+    header("Location: ../../feed.php?page=dashboard");
     exit;
 }
 
@@ -12,16 +10,12 @@ $user_name = $_SESSION['user_name'];
 $current_month = (int)($_GET['month'] ?? date('m'));
 $current_year = (int)($_GET['year'] ?? date('Y'));
 
-$base_url = "../../../";
-require_once '../../components/header.php';
+$base_url = "../";
 ?>
+<link rel="stylesheet" href="<?php echo $base_url; ?>assets/css/dashboard.css">
+<link rel="stylesheet" href="<?php echo $base_url; ?>assets/css/colleagues.css">
 
-    <link rel="stylesheet" href="../../../assets/css/dashboard.css">
-    <link rel="stylesheet" href="../../../assets/css/colleagues.css">
-</head>
-<body>
-    <?php require_once '../../components/navbar.php'; ?>
-    <div class="dashboard-container">
+<div class="dashboard-container">
         <div class="welcome-card full-width mb-6" style="background: white; padding: 20px; border-radius: 12px; shadow: 0 1px 3px rgba(0,0,0,0.1);">
             <h1 class="text-2xl font-bold text-gray-900">Welcome, <?php echo htmlspecialchars($user_name); ?></h1>
             <p class="text-gray-600"><?php echo htmlspecialchars($_SESSION['office_name'] ?? 'N/A'); ?> | <?php echo htmlspecialchars($_SESSION['organization_name'] ?? 'N/A'); ?></p>
@@ -105,7 +99,7 @@ require_once '../../components/header.php';
         <div class="colleagues-section full-width mt-6" style="background: white; padding: 20px; border-radius: 12px; shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <h3 class="text-xl font-bold text-gray-800">Your Colleagues</h3>
-                <a href="colleagues.php" style="font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none;">View All →</a>
+                <a href="feed.php?page=colleagues" style="font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none;">View All →</a>
             </div>
             <div id="interns-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <p class="text-gray-500 italic text-sm">Loading colleagues...</p>
@@ -199,10 +193,7 @@ require_once '../../components/header.php';
         let filterFromDate = null;
         let filterToDate = null;
         const currentUserId = userId;
-        const apiBasePath = '../../../';
+        const apiBasePath = '../';
     </script>
-    <script src="../../../assets/js/dashboard.js"></script>
-    <script src="../../../assets/js/colleagues.js"></script>
-    <?php require_once '../../components/footer.php'; ?>
-</body>
-</html>
+    <script src="../assets/js/dashboard.js"></script>
+    <script src="../assets/js/colleagues.js"></script>

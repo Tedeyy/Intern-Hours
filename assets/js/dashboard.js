@@ -60,7 +60,7 @@ function loadInterns() {
   const list = document.getElementById("interns-list");
   if (!list) return;
 
-  fetch("../../../api/interns.php")
+  fetch(apiBasePath + "api/interns.php")
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
@@ -116,7 +116,7 @@ function setDefaultDates() {
 }
 
 function loadAllHours() {
-  fetch("../../../api/hours.php?all=true" + getUserIdQuery())
+  fetch(apiBasePath + "api/hours.php?all=true" + getUserIdQuery())
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
@@ -241,7 +241,7 @@ function renderCalendar() {
 
 function loadAbsences() {
   fetch(
-    "../../../api/absences.php?month=" +
+    apiBasePath + "api/absences.php?month=" +
       currentMonth +
       "&year=" +
       currentYear +
@@ -308,7 +308,7 @@ function saveAbsence() {
   formData.append("date", selectedDate);
   formData.append("reason", reason);
 
-  fetch("../../../api/absences.php", {
+  fetch(apiBasePath + "api/absences.php", {
     method: "POST",
     body: formData,
   })
@@ -337,7 +337,7 @@ function deleteAbsence() {
   formData.append("action", "delete");
   formData.append("id", absence.absences_id);
 
-  fetch("../../../api/absences.php", {
+  fetch(apiBasePath + "api/absences.php", {
     method: "POST",
     body: formData,
   })
@@ -359,7 +359,7 @@ function deleteAbsence() {
 
 function loadHours() {
   fetch(
-    "../../../api/hours.php?month=" +
+    apiBasePath + "api/hours.php?month=" +
       currentMonth +
       "&year=" +
       currentYear +
@@ -404,7 +404,7 @@ function saveHours() {
   formData.append("date", selectedDate);
   formData.append("hours", hours);
 
-  fetch("../../../api/hours.php", {
+  fetch(apiBasePath + "api/hours.php", {
     method: "POST",
     body: formData,
   })
@@ -433,7 +433,7 @@ function deleteHours() {
   formData.append("date", selectedDate);
   formData.append("delete", "true");
 
-  fetch("../../../api/hours.php", {
+  fetch(apiBasePath + "api/hours.php", {
     method: "POST",
     body: formData,
   })
@@ -554,7 +554,7 @@ function loadFilteredHours() {
   params.append("from_date", filterFromDate);
   params.append("to_date", filterToDate);
 
-  fetch("../../../api/hours.php?" + params.toString() + getUserIdQuery())
+  fetch(apiBasePath + "api/hours.php?" + params.toString() + getUserIdQuery())
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {

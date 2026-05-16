@@ -6,10 +6,10 @@
             </div>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="<?php echo $base_url ?? ''; ?>views/pages/<?php echo $_SESSION['user_role'] === 'Admin' ? 'supervisor/dashboard.php' : 'intern/dashboard.php'; ?>" class="text-gray-600 hover:text-gray-900 font-medium transition">Dashboard</a>
+                    <a href="<?php echo $base_url ?? ''; ?>views/feed.php?page=dashboard" class="text-gray-600 hover:text-gray-900 font-medium transition">Dashboard</a>
                     
                     <?php if ($_SESSION['user_role'] !== 'Admin'): ?>
-                        <a href="<?php echo $base_url ?? ''; ?>views/pages/intern/colleagues.php" class="text-gray-600 hover:text-gray-900 font-medium transition">Colleagues</a>
+                        <a href="<?php echo $base_url ?? ''; ?>views/feed.php?page=colleagues" class="text-gray-600 hover:text-gray-900 font-medium transition">Colleagues</a>
                     <?php endif; ?>
 
                     <?php if ($_SESSION['user_role'] === 'Admin'): ?>

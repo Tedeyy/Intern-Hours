@@ -1,9 +1,7 @@
 <?php
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../../feed.php?page=login");
+// Ensure this is included through feed.php
+if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
+    header("Location: ../../feed.php?page=colleagues");
     exit;
 }
 
@@ -12,16 +10,11 @@ $user_name = $_SESSION['user_name'];
 $office_name = $_SESSION['office_name'] ?? 'N/A';
 $organization_name = $_SESSION['organization_name'] ?? 'N/A';
 
-$base_url = "../../../";
-require_once '../../components/header.php';
+$base_url = "../";
 ?>
+<link rel="stylesheet" href="<?php echo $base_url; ?>assets/css/colleagues.css">
 
-    <link rel="stylesheet" href="../../../assets/css/colleagues.css">
-</head>
-<body>
-    <?php require_once '../../components/navbar.php'; ?>
-
-    <div class="colleagues-page">
+<div class="colleagues-page">
         <!-- Page Header -->
         <div class="colleagues-page-header">
             <div>
@@ -120,9 +113,6 @@ require_once '../../components/header.php';
 
     <script>
         const currentUserId = <?php echo $user_id; ?>;
-        const apiBasePath = '../../../';
+        const apiBasePath = '../';
     </script>
-    <script src="../../../assets/js/colleagues.js"></script>
-    <?php require_once '../../components/footer.php'; ?>
-</body>
-</html>
+    <script src="../assets/js/colleagues.js"></script>

@@ -29,9 +29,6 @@
 /* Universal Background Fixes */
 .dark-mode .bg-white,
 .dark-mode .bg-gray-50,
-.dark-mode .bg-blue-50,
-.dark-mode .bg-green-50,
-.dark-mode .bg-red-50,
 .dark-mode .bg-gray-900:not(button),
 .dark-mode .stat-pill,
 .dark-mode .colleague-card,
@@ -93,6 +90,13 @@
 .dark-mode .text-blue-600, .dark-mode .text-blue-500, .dark-mode .blue { color: #60a5fa !important; }
 .dark-mode .text-green-600, .dark-mode .text-green-500, .dark-mode .green { color: #34d399 !important; }
 .dark-mode .text-amber-600, .dark-mode .text-amber-500, .dark-mode .amber { color: #fbbf24 !important; }
+.dark-mode .text-red-600, .dark-mode .text-red-500, .dark-mode .red { color: #f87171 !important; }
+
+/* Refined Backgrounds for semantic elements */
+.dark-mode .bg-blue-50:not(button) { background-color: #1e3a8a !important; }
+.dark-mode .bg-green-50:not(button) { background-color: #064e3b !important; }
+.dark-mode .bg-red-50:not(button) { background-color: #450a0a !important; }
+.dark-mode .bg-amber-50:not(button) { background-color: #451a03 !important; }
 
 /* Stat Icons */
 .dark-mode .stat-icon.blue { background: #1e3a8a !important; color: #60a5fa !important; }
@@ -115,11 +119,53 @@
 .dark-mode .colleague-private-badge { background: #111827 !important; color: #9ca3af !important; }
 
 /* Calendar */
-.dark-mode .day-cell { border: 1px solid var(--border-color) !important; background-color: var(--bg-primary) !important; }
-.dark-mode .day-cell:hover { background-color: #374151 !important; }
-.dark-mode .day.logged { background: #064e3b !important; border-color: #065f46 !important; color: #34d399 !important; }
-.dark-mode .day { background: #111827 !important; color: var(--text-primary) !important; }
-.dark-mode .day-hrs { color: #34d399 !important; }
+.dark-mode .day-cell { border: 1px solid #1f2937; background-color: #1f2937; }
+.dark-mode .day-cell:hover { background-color: #374151; }
+
+.dark-mode .day-cell.other-month,
+.dark-mode .day-cell.disabled {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    opacity: 0.3;
+}
+
+/* Calendar Status Overrides (Preserving Colors) */
+.dark-mode .day-cell.logged { 
+    background-color: rgba(6, 78, 59, 0.4) !important; 
+    border-color: #059669 !important; 
+}
+.dark-mode .day-cell.logged .day-cell-hours { color: #34d399 !important; }
+
+.dark-mode .day-cell.holiday { 
+    background-color: rgba(69, 26, 3, 0.4) !important; 
+    border-color: #b45309 !important; 
+}
+.dark-mode .day-cell.holiday .holiday-badge { 
+    background-color: #78350f !important; 
+    color: #fbbf24 !important; 
+}
+
+.dark-mode .day-cell.today {
+    border: 2px solid #2563eb !important;
+    background-color: rgba(30, 58, 138, 0.4) !important;
+}
+
+/* Absence Badges in Dark Mode */
+.dark-mode .absence-badge.pending { 
+    background-color: #451a03 !important; 
+    color: #fbbf24 !important; 
+    border-color: #b45309 !important; 
+}
+.dark-mode .absence-badge.approved { 
+    background-color: #064e3b !important; 
+    color: #34d399 !important; 
+    border-color: #065f46 !important; 
+}
+.dark-mode .absence-badge.rejected { 
+    background-color: #450a0a !important; 
+    color: #f87171 !important; 
+    border-color: #991b1b !important; 
+}
 
 /* Inputs */
 .dark-mode input, .dark-mode select, .dark-mode textarea { background-color: #111827 !important; border-color: #374151 !important; color: #ffffff !important; }
