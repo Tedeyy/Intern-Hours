@@ -29,6 +29,9 @@
 /* Universal Background Fixes */
 .dark-mode .bg-white,
 .dark-mode .bg-gray-50,
+.dark-mode .bg-gray-100,
+.dark-mode .bg-gray-50\/50,
+.dark-mode .hover\:bg-white:hover,
 .dark-mode .bg-gray-900:not(button),
 .dark-mode .stat-pill,
 .dark-mode .colleague-card,
@@ -47,6 +50,10 @@
 .dark-mode [style*="background-color:white"] {
     background-color: var(--bg-secondary) !important;
     background: var(--bg-secondary) !important;
+}
+
+.dark-mode .hover\:bg-white:hover {
+    background-color: #374151 !important;
 }
 
 /* Universal Text Fixes */
@@ -111,11 +118,25 @@
 .dark-mode .sort-btn:not(.active) { background: #374151 !important; color: #d1d5db !important; border-color: #4b5563 !important; }
 .dark-mode .sort-btn.active { background: #3b82f6 !important; color: white !important; border-color: #3b82f6 !important; }
 
-/* Cards & Modals */
 .dark-mode .colleague-card:hover { border-color: #3b82f6 !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important; }
 .dark-mode .colleague-card-body { border-top: 1px solid var(--border-color) !important; }
 .dark-mode .colleague-view-btn { background: #374151 !important; color: #f9fafb !important; }
 .dark-mode .colleague-view-btn:hover { background: #3b82f6 !important; color: white !important; }
+
+/* Intern Modal Specifics */
+.dark-mode .intern-modal-stat { background: #111827 !important; border: 1px solid #374151 !important; }
+.dark-mode .intern-modal-stat .value { color: #f9fafb !important; }
+.dark-mode .intern-modal-stat .label { color: #9ca3af !important; }
+.dark-mode .intern-modal-close { background: #374151 !important; color: #f9fafb !important; }
+.dark-mode .intern-modal-close:hover { background: #4b5563 !important; }
+.dark-mode .intern-modal-stats { border-color: #374151 !important; }
+.dark-mode .intern-hours-modal-content { border: 1px solid #374151 !important; }
+.dark-mode .intern-modal-calendar-nav button { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
+.dark-mode .intern-modal-calendar-nav button:hover { background: #374151 !important; }
+.dark-mode .intern-modal-grid .day { background: #111827 !important; color: #f9fafb !important; border: 1px solid #1f2937 !important; }
+.dark-mode .intern-modal-grid .day.empty { background: transparent !important; border-color: transparent !important; }
+.dark-mode .intern-modal-grid .day.logged { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; }
+.dark-mode .intern-modal-grid .day-hrs { color: #34d399 !important; }
 .dark-mode .colleague-private-badge { background: #111827 !important; color: #9ca3af !important; }
 
 /* Calendar */
