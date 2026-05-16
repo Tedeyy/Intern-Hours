@@ -1,0 +1,199 @@
+/**
+ * Global Dark Mode Overrides
+ */
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --border-color: #e5e7eb;
+}
+
+.dark-mode {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+    
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Transitions */
+.dark-mode, .dark-mode * {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Universal Background Fixes */
+.dark-mode .bg-white,
+.dark-mode .bg-gray-50,
+.dark-mode .bg-gray-100,
+.dark-mode .bg-gray-50\/50,
+.dark-mode .hover\:bg-white:hover,
+.dark-mode .bg-gray-900:not(button),
+.dark-mode .stat-pill,
+.dark-mode .colleague-card,
+.dark-mode .welcome-card,
+.dark-mode .calendar-section,
+.dark-mode .stat-card,
+.dark-mode .filter-section,
+.dark-mode .modal-content,
+.dark-mode .colleagues-section,
+.dark-mode .intern-hours-modal-content,
+.dark-mode .intern-modal-header,
+.dark-mode .sort-btn,
+.dark-mode [style*="background: white"],
+.dark-mode [style*="background-color: white"],
+.dark-mode [style*="background:white"],
+.dark-mode [style*="background-color:white"] {
+    background-color: var(--bg-secondary) !important;
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .hover\:bg-white:hover {
+    background-color: #374151 !important;
+}
+
+/* Universal Text Fixes */
+.dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5, .dark-mode h6,
+.dark-mode p, .dark-mode span, .dark-mode label, .dark-mode div, .dark-mode a {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .text-gray-900,
+.dark-mode .text-gray-800,
+.dark-mode .text-gray-700,
+.dark-mode .text-black,
+.dark-mode .colleague-name,
+.dark-mode .stat-number,
+.dark-mode .colleague-hours,
+.dark-mode [style*="color: #111"],
+.dark-mode [style*="color:#111"],
+.dark-mode [style*="color: #1a1a1a"],
+.dark-mode [style*="color:#1a1a1a"],
+.dark-mode [style*="color: black"] {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .text-gray-600,
+.dark-mode .text-gray-500,
+.dark-mode .text-gray-400,
+.dark-mode .subtitle,
+.dark-mode .stat-desc,
+.dark-mode .colleague-email,
+.dark-mode .colleague-hours-label,
+.dark-mode .modal-subtitle,
+.dark-mode .day-hdr,
+.dark-mode [style*="color: #6b7280"],
+.dark-mode [style*="color:#6b7280"],
+.dark-mode [style*="color: #666"],
+.dark-mode [style*="color:#666"] {
+    color: var(--text-secondary) !important;
+}
+
+/* Specialized Colors */
+.dark-mode .text-blue-600, .dark-mode .text-blue-500, .dark-mode .blue { color: #60a5fa !important; }
+.dark-mode .text-green-600, .dark-mode .text-green-500, .dark-mode .green { color: #34d399 !important; }
+.dark-mode .text-amber-600, .dark-mode .text-amber-500, .dark-mode .amber { color: #fbbf24 !important; }
+.dark-mode .text-red-600, .dark-mode .text-red-500, .dark-mode .red { color: #f87171 !important; }
+
+/* Refined Backgrounds for semantic elements */
+.dark-mode .bg-blue-50:not(button) { background-color: #1e3a8a !important; }
+.dark-mode .bg-green-50:not(button) { background-color: #064e3b !important; }
+.dark-mode .bg-red-50:not(button) { background-color: #450a0a !important; }
+.dark-mode .bg-amber-50:not(button) { background-color: #451a03 !important; }
+
+/* Stat Icons */
+.dark-mode .stat-icon.blue { background: #1e3a8a !important; color: #60a5fa !important; }
+.dark-mode .stat-icon.green { background: #064e3b !important; color: #34d399 !important; }
+.dark-mode .stat-icon.amber { background: #451a03 !important; color: #fbbf24 !important; }
+
+/* Navigation & Borders */
+.dark-mode nav { background-color: var(--bg-secondary) !important; border-bottom: 1px solid var(--border-color) !important; }
+.dark-mode .border, .dark-mode .border-gray-100, .dark-mode .border-gray-50 { border-color: var(--border-color) !important; }
+
+/* Sort Buttons */
+.dark-mode .sort-btn:not(.active) { background: #374151 !important; color: #d1d5db !important; border-color: #4b5563 !important; }
+.dark-mode .sort-btn.active { background: #3b82f6 !important; color: white !important; border-color: #3b82f6 !important; }
+
+.dark-mode .colleague-card:hover { border-color: #3b82f6 !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important; }
+.dark-mode .colleague-card-body { border-top: 1px solid var(--border-color) !important; }
+.dark-mode .colleague-view-btn { background: #374151 !important; color: #f9fafb !important; }
+.dark-mode .colleague-view-btn:hover { background: #3b82f6 !important; color: white !important; }
+
+/* Intern Modal Specifics */
+.dark-mode .intern-modal-stat { background: #111827 !important; border: 1px solid #374151 !important; }
+.dark-mode .intern-modal-stat .value { color: #f9fafb !important; }
+.dark-mode .intern-modal-stat .label { color: #9ca3af !important; }
+.dark-mode .intern-modal-close { background: #374151 !important; color: #f9fafb !important; }
+.dark-mode .intern-modal-close:hover { background: #4b5563 !important; }
+.dark-mode .intern-modal-stats { border-color: #374151 !important; }
+.dark-mode .intern-hours-modal-content { border: 1px solid #374151 !important; }
+.dark-mode .intern-modal-calendar-nav button { background: #1f2937 !important; color: #f9fafb !important; border-color: #374151 !important; }
+.dark-mode .intern-modal-calendar-nav button:hover { background: #374151 !important; }
+.dark-mode .intern-modal-grid .day { background: #111827 !important; color: #f9fafb !important; border: 1px solid #1f2937 !important; }
+.dark-mode .intern-modal-grid .day.empty { background: transparent !important; border-color: transparent !important; }
+.dark-mode .intern-modal-grid .day.logged { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; }
+.dark-mode .intern-modal-grid .day-hrs { color: #34d399 !important; }
+.dark-mode .colleague-private-badge { background: #111827 !important; color: #9ca3af !important; }
+
+/* Calendar */
+.dark-mode .day-cell { border: 1px solid #1f2937; background-color: #1f2937; }
+.dark-mode .day-cell:hover { background-color: #374151; }
+
+.dark-mode .day-cell.other-month,
+.dark-mode .day-cell.disabled {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    opacity: 0.3;
+}
+
+/* Calendar Status Overrides (Preserving Colors) */
+.dark-mode .day-cell.logged { 
+    background-color: rgba(6, 78, 59, 0.4) !important; 
+    border-color: #059669 !important; 
+}
+.dark-mode .day-cell.logged .day-cell-hours { color: #34d399 !important; }
+
+.dark-mode .day-cell.holiday { 
+    background-color: rgba(69, 26, 3, 0.4) !important; 
+    border-color: #b45309 !important; 
+}
+.dark-mode .day-cell.holiday .holiday-badge { 
+    background-color: #78350f !important; 
+    color: #fbbf24 !important; 
+}
+
+.dark-mode .day-cell.today {
+    border: 2px solid #2563eb !important;
+    background-color: rgba(30, 58, 138, 0.4) !important;
+}
+
+/* Absence Badges in Dark Mode */
+.dark-mode .absence-badge.pending { 
+    background-color: #451a03 !important; 
+    color: #fbbf24 !important; 
+    border-color: #b45309 !important; 
+}
+.dark-mode .absence-badge.approved { 
+    background-color: #064e3b !important; 
+    color: #34d399 !important; 
+    border-color: #065f46 !important; 
+}
+.dark-mode .absence-badge.rejected { 
+    background-color: #450a0a !important; 
+    color: #f87171 !important; 
+    border-color: #991b1b !important; 
+}
+
+/* Inputs */
+.dark-mode input, .dark-mode select, .dark-mode textarea { background-color: #111827 !important; border-color: #374151 !important; color: #ffffff !important; }
+.dark-mode input::placeholder { color: #4b5563 !important; }
+.dark-mode .colleagues-search svg { color: #4b5563 !important; }
+
+/* Scrollbar */
+.dark-mode ::-webkit-scrollbar-track { background: #111827; }
+.dark-mode ::-webkit-scrollbar-thumb { background: #374151; border-radius: 5px; }
+.dark-mode ::-webkit-scrollbar-thumb:hover { background: #4b5563; }

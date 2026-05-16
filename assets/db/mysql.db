@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS users (
   role ENUM('Intern', 'Admin') NOT NULL,
   office_id INT NOT NULL,
   organization_id INT NOT NULL,
+  is_darkmode ENUM('0', '1') DEFAULT '0' NOT NULL,
+  is_public ENUM('0', '1') DEFAULT '0' NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() 
     ON UPDATE CURRENT_TIMESTAMP(),

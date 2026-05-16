@@ -1,21 +1,15 @@
 <?php
-session_start();
-
-// Check if user is logged in and is Admin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'Admin') {
-    header("Location: ../../feed.php?page=login");
+// Ensure this is included through feed.php
+if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
+    header("Location: ../../feed.php?page=dashboard");
     exit;
 }
 
-$base_url = "../../../";
-require_once '../../components/header.php';
+$base_url = "../";
 ?>
-<link rel="stylesheet" href="../../../assets/css/supervisor-dashboard.css">
-</head>
-<body class="bg-gray-50">
-    <?php require_once '../../components/navbar.php'; ?>
+<link rel="stylesheet" href="<?php echo $base_url; ?>assets/css/supervisor-dashboard.css">
 
-    <div class="dashboard-container">
+<div class="dashboard-container">
         <div class="welcome-card">
             <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome, Supervisor <?php echo htmlspecialchars($_SESSION['user_name']); ?></h1>
             <p class="text-gray-600 mb-6">Managing interns for <strong><?php echo htmlspecialchars($_SESSION['office_name'] ?? 'N/A'); ?></strong> | <?php echo htmlspecialchars($_SESSION['organization_name'] ?? 'N/A'); ?></p>
@@ -86,7 +80,7 @@ require_once '../../components/header.php';
         }
 
         function loadPendingAbsences() {
-            fetch('../../../api/absences.php?pending=true')
+            fetch('<?php echo $base_url; ?>api/absences.php?pending=true')
                 .then(response => response.json())
                 .then(data => {
                     const list = document.getElementById('absence-requests-list');
@@ -129,7 +123,7 @@ require_once '../../components/header.php';
             formData.append('action', action);
             formData.append('id', id);
 
-            fetch('../../../api/absences.php', {
+            fetch('<?php echo $base_url; ?>api/absences.php', {
                 method: 'POST',
                 body: formData
             })
@@ -153,7 +147,3 @@ require_once '../../components/header.php';
             return `${months[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
         }
     </script>
-
-    <?php require_once '../../components/footer.php'; ?>
-</body>
-</html>

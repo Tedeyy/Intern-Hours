@@ -2,16 +2,19 @@
 require_once __DIR__ . '/../config.php';
 session_start();
 
-// If user is already logged in, redirect to their dashboard (unless they are trying to access a specific page)
+// Redirect logic
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
     $requested_page = $_GET['page'] ?? '';
+    // If logged in and on landing or login page, go to dashboard
     if (empty($requested_page) || $requested_page === 'login') {
-        $role = $_SESSION['user_role'];
-        if ($role === 'Admin') {
-            header("Location: pages/supervisor/dashboard.php");
-        } else {
-            header("Location: pages/intern/dashboard.php");
-        }
+        header("Location: feed.php?page=dashboard");
+        exit;
+    }
+} else {
+    // If not logged in and trying to access restricted page, go to login
+    $requested_page = $_GET['page'] ?? 'login';
+    if (!in_array($requested_page, ['login', 'register'])) {
+        header("Location: feed.php?page=login");
         exit;
     }
 }
@@ -25,7 +28,7 @@ $base_url = "../";
 require_once __DIR__ . '/components/header.php'; 
 ?>
 </head>
-<body>
+<body class="<?php echo isset($_SESSION['user_id']) ? '' : 'bg-gray-50'; ?>">
 
 <?php if ($showNavbar): ?>
     <?php require_once __DIR__ . '/components/navbar.php'; ?>
@@ -39,6 +42,16 @@ require_once __DIR__ . '/components/header.php';
             break;
         case 'profile':
             require_once __DIR__ . '/pages/intern/profile.php';
+            break;
+        case 'dashboard':
+            if ($_SESSION['user_role'] === 'Admin') {
+                require_once __DIR__ . '/pages/supervisor/dashboard.php';
+            } else {
+                require_once __DIR__ . '/pages/intern/dashboard.php';
+            }
+            break;
+        case 'colleagues':
+            require_once __DIR__ . '/pages/intern/colleagues.php';
             break;
         case 'login':
         default:
