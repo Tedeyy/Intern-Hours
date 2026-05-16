@@ -267,3 +267,38 @@ $base_url = "../";
 </script>
 <script src="<?php echo $base_url; ?>assets/js/colleagues.js"></script>
 <script src="<?php echo $base_url; ?>assets/js/profile.js"></script>
+
+<!-- Intern Hours Detail Modal -->
+<div class="intern-hours-modal" id="intern-hours-modal">
+    <div class="intern-hours-modal-content">
+        <div class="intern-modal-header">
+            <div class="intern-info">
+                <div class="modal-avatar" id="intern-modal-avatar"></div>
+                <div>
+                    <h3 id="intern-modal-name">Loading...</h3>
+                    <div class="modal-subtitle" id="intern-modal-subtitle"></div>
+                </div>
+            </div>
+            <button class="intern-modal-close" onclick="closeInternModal()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="intern-modal-stats">
+            <div class="intern-modal-stat">
+                <div class="value" id="intern-stat-total">—</div>
+                <div class="label">Total Hours</div>
+            </div>
+            <div class="intern-modal-stat">
+                <div class="value" id="intern-stat-days">—</div>
+                <div class="label">Days Logged</div>
+            </div>
+            <div class="intern-modal-stat">
+                <div class="value" id="intern-stat-avg">—</div>
+                <div class="label">Avg/Day</div>
+            </div>
+        </div>
+        <div id="intern-modal-body">
+            <!-- Calendar or private notice will render here -->
+        </div>
+    </div>
+</div>

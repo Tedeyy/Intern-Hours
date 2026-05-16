@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initPrivacyToggle();
     initDarkModeToggle();
     initPasswordForm();
+    initNetwork();
 });
 
 /**
@@ -153,4 +154,73 @@ function showToast(message) {
             status.style.opacity = '0';
         }, 2000);
     }
+}
+
+/**
+ * Initialize Network Section
+ */
+function initNetwork() {
+    const list = document.getElementById('interns-list');
+    if (!list) return;
+
+    fetch(apiBasePath + 'api/interns.php')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                renderNetwork(data.interns.filter(i => parseInt(i.id) !== currentUserId));
+            } else {
+                list.innerHTML = '<p class="col-span-full text-center text-sm text-gray-400 py-8">Could not load network</p>';
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            list.innerHTML = '<p class="col-span-full text-center text-sm text-gray-400 py-8">Connection error</p>';
+        });
+}
+
+/**
+ * Render Network Cards
+ */
+function renderNetwork(interns) {
+    const list = document.getElementById('interns-list');
+    if (!list) return;
+    
+    if (interns.length === 0) {
+        list.innerHTML = '<p class="col-span-full text-center text-sm text-gray-400 py-8">No colleagues found</p>';
+        return;
+    }
+
+    list.innerHTML = '';
+    interns.forEach(intern => {
+        const isPublic = parseInt(intern.is_public) === 1;
+        const initial = intern.name.charAt(0).toUpperCase();
+        
+        const card = document.createElement('div');
+        card.className = 'group p-4 rounded-2xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-xl hover:shadow-gray-100 transition duration-300';
+        
+        card.innerHTML = `
+            <div class="flex flex-col items-center text-center">
+                <div class="w-12 h-12 rounded-xl bg-gray-900 text-white flex items-center justify-center font-bold text-lg mb-3 shadow-lg shadow-gray-200">
+                    ${initial}
+                </div>
+                <h5 class="font-bold text-gray-900 text-sm truncate w-full">${intern.name}</h5>
+                <div class="mt-2 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full ${isPublic ? 'bg-green-500' : 'bg-gray-300'}"></span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider ${isPublic ? 'text-green-600' : 'text-gray-400'}">
+                        ${isPublic ? 'Public' : 'Private'}
+                    </span>
+                </div>
+                ${isPublic ? `
+                    <button onclick="openInternModal(${intern.id})" class="mt-3 w-full py-2 bg-white border border-gray-200 text-[10px] font-bold uppercase tracking-widest text-gray-600 rounded-lg hover:bg-gray-900 hover:text-white hover:border-gray-900 transition">
+                        View Logs
+                    </button>
+                ` : `
+                    <div class="mt-3 w-full py-2 bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 rounded-lg cursor-not-allowed">
+                        Locked
+                    </div>
+                `}
+            </div>
+        `;
+        list.appendChild(card);
+    });
 }
