@@ -14,48 +14,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Validation
-    if (empty($email) || empty($password)) {
-        $error = "Email and password are required.";
-        echo json_encode(['error' => $error]);
-        exit;
-    } else {
+    try {
+        // Validation
+        if (empty($email) || empty($password)) {
+            echo json_encode(['error' => "Email and password are required."]);
+            exit;
+        }
+
         // Check if user exists
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
         if ($user) {
-            $secret_key = getenv('SECRET_KEY') ?: 'default-secret-key';
+            $secret_key = $_ENV['SECRET_KEY'] ?? $_SERVER['SECRET_KEY'] ?? getenv('SECRET_KEY') ?: 'default-secret-key';
             $hashed_password = hash_hmac('sha256', $password, $secret_key);
             
-            if (hash_equals($user['password'], $hashed_password)) {
-            // Start session and store user info
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_role'] = $user['role'];
-            $_SESSION['office_id'] = $user['office_id'];
-            $_SESSION['organization_id'] = $user['organization_id'];
-            $_SESSION['is_darkmode'] = (bool)$user['is_darkmode'];
+            // Try matching with current key
+            $is_correct = hash_equals($user['password'], $hashed_password);
+            
+            // If it fails, try the fallback key for legacy users
+            if (!$is_correct && $secret_key !== 'default-secret-key') {
+                $fallback_hashed = hash_hmac('sha256', $password, 'default-secret-key');
+                $is_correct = hash_equals($user['password'], $fallback_hashed);
+            }
+            
+            if ($is_correct) {
+                // Start session and store user info
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_role'] = $user['role'];
+                $_SESSION['office_id'] = $user['office_id'];
+                $_SESSION['organization_id'] = $user['organization_id'];
+                $_SESSION['is_darkmode'] = (bool)($user['is_darkmode'] ?? false);
 
-            // Fetch names for session
-            $stmt = $pdo->prepare("SELECT office_name FROM office WHERE id = ?");
-            $stmt->execute([$user['office_id']]);
-            $_SESSION['office_name'] = $stmt->fetchColumn();
+                // Fetch names for session
+                $stmt = $pdo->prepare("SELECT office_name FROM office WHERE id = ?");
+                $stmt->execute([$user['office_id']]);
+                $_SESSION['office_name'] = $stmt->fetchColumn();
 
-            $stmt = $pdo->prepare("SELECT organization_name FROM organization WHERE id = ?");
-            $stmt->execute([$user['organization_id']]);
-            $_SESSION['organization_name'] = $stmt->fetchColumn();
+                $stmt = $pdo->prepare("SELECT organization_name FROM organization WHERE id = ?");
+                $stmt->execute([$user['organization_id']]);
+                $_SESSION['organization_name'] = $stmt->fetchColumn();
 
-            // Reset failed attempts on successful login
-            unset($_SESSION['failed_attempts']);
-            unset($_SESSION['login_blocked_until']);
+                // Reset failed attempts on successful login
+                unset($_SESSION['failed_attempts']);
+                unset($_SESSION['login_blocked_until']);
 
-            // Return success response with redirect URL
-            $redirectUrl = $user['role'] === 'Admin' ? '../views/pages/supervisor/dashboard.php' : '../views/pages/intern/dashboard.php';
-            echo json_encode(['success' => true, 'redirect' => $redirectUrl]);
-            exit;
+                // Return success response with redirect URL
+                $redirectUrl = $user['role'] === 'Admin' ? '../views/pages/supervisor/dashboard.php' : '../views/pages/intern/dashboard.php';
+                echo json_encode(['success' => true, 'redirect' => $redirectUrl]);
+                exit;
             }
         }
         
@@ -69,8 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
         
-        $error = "Invalid email or password.";
-        echo json_encode(['error' => $error, 'attempts' => $_SESSION['failed_attempts']]);
+        echo json_encode(['error' => "Invalid email or password.", 'attempts' => $_SESSION['failed_attempts']]);
+        exit;
+    } catch (Exception $e) {
+        echo json_encode(['error' => 'An internal error occurred: ' . $e->getMessage()]);
         exit;
     }
 }

@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 // Insert new user
-                $secret_key = getenv('SECRET_KEY') ?: 'default-secret-key';
+                $secret_key = $_ENV['SECRET_KEY'] ?? 'default-secret-key';
                 $hashed_password = hash_hmac('sha256', $password, $secret_key);
                 $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, office_id, organization_id) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$name, $email, $hashed_password, $role, $office_id, $organization_id]);
